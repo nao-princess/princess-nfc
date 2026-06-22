@@ -50,10 +50,10 @@
   <audio id="audio_arigatou" src="お返事ありがとう.wav"></audio>
   <audio id="audio_yuuki" src="ゆうきのくりすたる.wav"></audio>
   <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
-  <audio id="audio_mode_on" src="プリンセスモードオン.wav"></audio>
+  <audio id="audio_mode_on" src="モードオン.wav"></audio>
   <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
   <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
-
+<audio id="audio_voice5" src="プリンセス.wav"></audio>
   <!-- ========================================== -->
   <!-- JavaScript側：ロボットへの命令・シナリオ -->
   <!-- ========================================== -->
@@ -159,8 +159,19 @@ function sparkle() {
       await playVoice("audio_voice5");
       await sleep(2000); //
 
-      text.innerText = "プリンセスモード……オン✨";
-      await playVoice("audio_mode_on");
+     // 1. まず「プリンセス…」と表示
+  text.innerText = "プリンセスモード……";
+  await playVoice("audio_princess");
+  await sleep(1000); // 1秒待つ
+
+  // 2. 画面を「💎」にして、ピピッという効果音を鳴らす
+  text.innerText = "💎";
+  await playVoice("audio_tsushin"); 
+  await sleep(500); // 0.5秒待つ
+
+  // 3. 最後に「モード、オン！✨」と表示してセリフを流す
+  text.innerText = "モード、オン！✨";
+  await playVoice("audio_mode_on");
 
       // 最後はBGMを流してエフェクトを出す
       const kirakira = document.getElementById("audio_kirakira");
