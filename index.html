@@ -6,6 +6,10 @@
   <title>プリンセスからのつうしん</title>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    @keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
     body {
       font-family: 'Helvetica Neue', Arial, sans-serif;
       background-color: #ffe6f2;
@@ -54,6 +58,9 @@
   <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
   <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
 <audio id="audio_princess" src="プリンセス.wav"></audio>
+
+  <!-- ★プリンセスの画像が表示される場所（背景透過素材が映える設定） -->
+<img id="princess_image" src="princess.png" alt="プリンセス" style="display: none; max-width: 80%; height: auto; margin: 20px auto 0 auto; animation: popIn 0.5s ease-out;">
   <!-- ========================================== -->
   <!-- JavaScript側：ロボットへの命令・シナリオ -->
   <!-- ========================================== -->
@@ -190,6 +197,7 @@ function sparkle() {
       if (kirakira) kirakira.play();
 
       sparkle();
+      document.getElementById("princess_image").style.display = "block";
 
       // もう一度遊べるようにボタンを元に戻す
       document.querySelector(".jewel").style.pointerEvents = "auto";
