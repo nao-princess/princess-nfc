@@ -115,7 +115,9 @@
     
      text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
       await playVoice("audio_dounyu");
-　　　await sleep(1500);
+
+     text.innerText = "……お返事まっています…";
+      await sleep(2000); // お返事を待つために2秒間あける
       
       text.innerText = "なおひめさま、おはようございます！";
       await playVoice("audio_ohayou");
