@@ -164,10 +164,22 @@ function sparkle() {
   await playVoice("audio_princess");
   await sleep(1000); // 1秒待つ
 
-  // 2. 画面を「💎」にして、ピピッという効果音を鳴らす
-  text.innerText = "💎";
-  await playVoice("audio_tsushin"); 
-  await sleep(500); // 0.5秒待つ
+// 2. 画面を「💎をタップしてね！」にして、一時的にボタンをまた押せるようにする
+  text.innerText = "💎をタップしてね！";
+  const jewelButton = document.querySelector(".jewel");
+  jewelButton.style.pointerEvents = "auto"; // タップできるように復活
+
+  // 💎が押されるまでここでじっと待つ魔法の命令
+  await new Promise(resolve => {
+    jewelButton.onclick = async () => {
+      // 宝石が押されたら、もう連打できないように再びロック
+      jewelButton.style.pointerEvents = "none";
+      
+      // 効果音を鳴らす
+      await playVoice("audio_tsushin");
+      resolve(); // 次の処理へ進む合図
+    };
+  });
 
   // 3. 最後に「モード、オン！✨」と表示してセリフを流す
   text.innerText = "モード、オン！✨";
