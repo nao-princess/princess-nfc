@@ -120,6 +120,7 @@ function sparkle() {
 
     // 宝石が押されたときのメインの魔法シナリオ
     async function startMagic() {
+      document.getElementById("princess_image").style.display = "none";
       // 1. 最初にあらかじめすべての音声を一瞬だけ再生して止める（スマホ対策）
       const audios = document.querySelectorAll("audio");
       for (const a of audios) {
