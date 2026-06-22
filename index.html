@@ -39,16 +39,19 @@ for(const a of audios){
   text.innerText = "📡通信接続中…";
   await sleep(1500);
 
-  text.innerText = "👸おはようございます、ナオ姫！";
+　 
+　text.innerText = "ピンポーン♪プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
+  await playVoice("voice1");
+
+  text.innerText = "なおひめさま、おはようございます！";
   await playVoice("voice1");
 
   text.innerText = "……お返事まっています…";
-  await playVoice("voice2");
 
-  text.innerText = "ありがとう！今日は特別な日です✨";
+  text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです";
   await playVoice("voice3");
 
-  text.innerText = "今日は『ゆうきのプリンセス』の日💖";
+  text.innerText = "今日の魔法は…ゆうきのクリスタルです💖";
   await playVoice("voice4");
 
   text.innerText = "先生におはようって言えたら魔法成功！";
