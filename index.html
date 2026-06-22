@@ -50,7 +50,7 @@
   <audio id="audio_yuuki" src="ゆうきのくりすたる.wav"></audio>
   <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
   <audio id="audio_mode_on" src="プリンセスモードオン.wav"></audio>
-
+  <audio id="audio_tsushin" src="カーソル移動11.wav"></audio>
   <!-- ※「voice5」の音声ファイルが必要な場合はリポジトリにアップロードしてください -->
   <audio id="audio_voice5" src="voice5.wav"></audio>
 
@@ -109,10 +109,11 @@
 
       // シナリオスタート
       text.innerText = "📡通信接続中…";
-      await sleep(1500);
       await playVoice("audio_kettei");
+      await sleep(1500);
+      await playVoice("audio_tsushin");
     
-     text.innerText = "ピンポーン♪プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
+     text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
       await playVoice("audio_dounyu");
 
       text.innerText = "なおひめさま、おはようございます！";
