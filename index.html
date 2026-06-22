@@ -1,68 +1,149 @@
-function sleep(ms){
-  return new Promise(r => setTimeout(r, ms));
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プリンセスからのつうしん</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #ffe6f2;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .jewel {
+      font-size: 80px;
+      cursor: pointer;
+      display: inline-block;
+      margin: 20px;
+      user-select: none;
+      transition: transform 0.2s;
+    }
+    .jewel:active {
+      transform: scale(0.9);
+    }
+    #text {
+      font-size: 24px;
+      color: #d81b60;
+      margin-top: 30px;
+      min-height: 60px;
+      line-height: 1.5;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
 
-async function playVoice(id){
-  const audio = document.getElementById(id);
+  <!-- 魔法を起こすための宝石ボタン -->
+  <div class="jewel" onclick="startMagic()">💎</div>
 
-  audio.currentTime = 0;
+  <!-- メッセージが表示される箱 -->
+  <div id="text">ほうせきを タップしてね！</div>
 
-  try{
-    await audio.play();
+  <!-- ========================================== -->
+  <!-- HTML側：音声プレイヤーの配置（IDはシンプルに命名） -->
+  <!-- ========================================== -->
+  <audio id="audio_kettei" src="決定ボタンを押す12.mp3"></audio>
+  <audio id="audio_dounyu" src="導入.wav"></audio>
+  <audio id="audio_ohayou" src="おはようございます.wav"></audio>
+  <audio id="audio_arigatou" src="お返事ありがとう.wav"></audio>
+  <audio id="audio_yuuki" src="ゆうきのくりすたる.wav"></audio>
+  <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
 
-    await new Promise(resolve=>{
-      audio.onended = resolve;
-    });
+  <!-- ※「voice5」と「プリンセスモードオン」の音声ファイルは、 -->
+  <!-- 必要に応じてリポジトリにアップロードし、下のsrcを変更してください -->
+  <audio id="audio_voice5" src="voice5.wav"></audio>
+  <audio id="audio_mode_on" src="プリンセスモードオン.wav"></audio>
 
-  }catch(e){
-    console.log("再生失敗", e);
-  }
-}
+  <!-- ========================================== -->
+  <!-- JavaScript側：ロボットへの命令・シナリオ -->
+  <!-- ========================================== -->
+  <script>
+    // 指定したミリ秒だけ待つ命令
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
 
-async function startMagic(){
-const audios = document.querySelectorAll("audio");
+    // 指定したIDの音声を再生し、終わるまで待つ命令
+    async function playVoice(id) {
+      const audio = document.getElementById(id);
+      if (!audio) {
+        console.log("見つからないID:", id);
+        return;
+      }
 
-for(const a of audios){
-  a.play()
-    .then(()=>{
-      a.pause();
-      a.currentTime = 0;
-    })
-    .catch(()=>{});
-}
+      audio.currentTime = 0;
 
-  const text = document.getElementById("text");
+      try {
+        await audio.play();
+        // 音声が最後まで再生されるのを待つ
+        await new Promise(resolve => {
+          audio.onended = resolve;
+        });
+      } catch (e) {
+        console.log("再生失敗:", id, e);
+      }
+    }
 
-  // 二重タップ防止
-  document.querySelector(".jewel").style.pointerEvents = "none";
+    // きらきらエフェクト用の仮の関数（エラー防止用）
+    function sparkle() {
+      console.log("きらきらエフェクト！");
+      // もしすでにsparkle関数が別にあれば、この関数は削除してください
+    }
 
-  text.innerText = "📡通信接続中…";
-  await sleep(1500);
- await playVoice("決定ボタンを押す12.wav");
-　 
-　text.innerText = "ピンポーン♪プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
-  await playVoice("導入.wav");
+    // 宝石が押されたときのメインの魔法シナリオ
+    async function startMagic() {
+      // 1. 最初にあらかじめすべての音声を一瞬だけ再生して止める（スマホ対策）
+      const audios = document.querySelectorAll("audio");
+      for (const a of audios) {
+        a.play()
+          .then(() => {
+            a.pause();
+            a.currentTime = 0;
+          })
+          .catch(() => {});
+      }
 
-  text.innerText = "なおひめさま、おはようございます！";
-  await playVoice("おはようございます.wav");
+      const text = document.getElementById("text");
 
-  text.innerText = "……お返事まっています…";
+      // 二重タップ防止（連打できないようにする）
+      document.querySelector(".jewel").style.pointerEvents = "none";
 
-  text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです";
-  await playVoice("お返事ありがとう.wav");
+      // シナリオスタート
+      text.innerText = "📡通信接続中…";
+      await sleep(1500);
+      await playVoice("audio_kettei");
+    
+     text.innerText = "ピンポーン♪プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
+      await playVoice("audio_dounyu");
 
-  text.innerText = "今日の魔法は…ゆうきのクリスタルです💖";
-  await playVoice("ゆうきのくりすたる.wav");
+      text.innerText = "なおひめさま、おはようございます！";
+      await playVoice("audio_ohayou");
 
-  text.innerText = "先生におはようって言えたら魔法成功！";
-  await playVoice("voice5");
+      text.innerText = "……お返事まっています…";
+      await sleep(2000); // お返事を待つために2秒間あける
 
-  text.innerText = "プリンセスモード……オン✨";
-  await playVoice("プリンセスモードオン.wav");
+      text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです";
+      await playVoice("audio_arigatou");
 
-  document.getElementById("きらきら輝く3.wav").play();
+      text.innerText = "今日の魔法は…ゆうきのクリスタルです💖";
+      await playVoice("audio_yuuki");
 
-  sparkle();
+      text.innerText = "先生におはようって言えたら魔法成功！";
+      await playVoice("audio_voice5");
 
-  // もう一度遊べるようにする
-  document.querySelector(".jewel").style.pointerEvents = "auto";
+      text.innerText = "プリンセスモード……オン✨";
+      await playVoice("audio_mode_on");
+
+      // 最後はBGMを流してエフェクトを出す
+      const kirakira = document.getElementById("audio_kirakira");
+      if (kirakira) kirakira.play();
+
+      sparkle();
+
+      // もう一度遊べるようにボタンを元に戻す
+      document.querySelector(".jewel").style.pointerEvents = "auto";
+    }
+  </script>
+</body>
+</html>
