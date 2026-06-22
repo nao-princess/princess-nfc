@@ -1,4 +1,3 @@
-<script>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -51,10 +50,9 @@
   <audio id="audio_yuuki" src="ゆうきのくりすたる.wav"></audio>
   <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
   <audio id="audio_mode_on" src="プリンセスモードオン.wav"></audio>
-  <!-- ※「voice5」と「プリンセスモードオン」の音声ファイルは、 -->
-  <!-- 必要に応じてリポジトリにアップロードし、下のsrcを変更してください -->
-  <audio id="audio_voice5" src="voice5.wav"></audio>
 
+  <!-- ※「voice5」の音声ファイルが必要な場合はリポジトリにアップロードしてください -->
+  <audio id="audio_voice5" src="voice5.wav"></audio>
 
   <!-- ========================================== -->
   <!-- JavaScript側：ロボットへの命令・シナリオ -->
@@ -89,7 +87,6 @@
     // きらきらエフェクト用の仮の関数（エラー防止用）
     function sparkle() {
       console.log("きらきらエフェクト！");
-      // もしすでにsparkle関数が別にあれば、この関数は削除してください
     }
 
     // 宝石が押されたときのメインの魔法シナリオ
@@ -148,4 +145,3 @@
   </script>
 </body>
 </html>
-<script>
