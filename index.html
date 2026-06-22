@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>プリンセス通信</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffb6e6, #b6e0ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+.card {
+  text-align: center;
+  color: white;
+}
+
+.jewel {
+  font-size: 100px;
+  cursor: pointer;
+  animation: float 2s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.text {
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.sparkle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  animation: sparkle 2s infinite;
+}
+
+@keyframes sparkle {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(2); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="jewel" onclick="startMagic()">💎</div>
+  <div class="text" id="text">プリンセス通信待機中…</div>
+</div>
+
+<script>
+function sleep(ms){
+  return new Promise(r => setTimeout(r, ms));
+}
+
+async function startMagic(){
+
+  const text = document.getElementById("text");
+
+  text.innerText = "📡通信接続中…";
+  await sleep(1500);
+
+  text.innerText = "👸おはようございます、ナオ姫！";
+  await sleep(3000);
+
+  text.innerText = "……お返事まっています…";
+  await sleep(3000);
+
+  text.innerText = "ありがとう！今日は特別な日です✨";
+  await sleep(2000);
+
+  text.innerText = "今日は『ゆうきのプリンセス』の日💖";
+  await sleep(3000);
+
+  text.innerText = "先生におはようって言えたら魔法成功！";
+  await sleep(3000);
+
+  text.innerText = "プリンセスモード……";
+  await sleep(1500);
+
+  text.innerText = "✨オン！！✨";
+
+  sparkle();
+}
+
+function sparkle(){
+  for(let i=0;i<20;i++){
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = Math.random()*100 + "vw";
+    s.style.top = Math.random()*100 + "vh";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),2000);
+  }
+}
+</script>
+
+</body>
+</html>
