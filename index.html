@@ -49,6 +49,32 @@
             display: none;
             animation: popIn 0.5s ease-out;
         }
+        /* キラキラアニメーション */
+    @keyframes sparkle {
+      0% {
+        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8),
+                    0 0 20px 10px rgba(255, 105, 180, 0.6),
+                    0 0 30px 15px rgba(255, 255, 255, 0.5);
+        opacity: 1;
+      }
+      50% {
+        box-shadow: 0 0 15px 10px rgba(255, 255, 255, 0.9),
+                    0 0 30px 20px rgba(255, 105, 180, 0.8),
+                    0 0 45px 25px rgba(255, 255, 255, 0.7);
+        opacity: 0.8;
+      }
+      100% {
+        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8),
+                    0 0 20px 10px rgba(255, 105, 180, 0.6),
+                    0 0 30px 15px rgba(255, 255, 255, 0.5);
+        opacity: 1;
+      }
+    }
+
+    .sparkle-effect {
+      animation: sparkle 1s linear infinite;
+    }
+  </style>
     </style>
 </head>
 <body>
@@ -255,6 +281,7 @@ await sleep(2000);
             const kirakira = document.getElementById("audio_kirakira");
             if (kirakira) kirakira.play();
             sparkle();
+            princessImg.classList.add('sparkle-effect'); // キラキラ演出を追加
 
             // 終了後、もう一度遊べるようにボタンエリアを元に戻す
             buttonArea.onclick = null; // クリックイベントを一度クリア
