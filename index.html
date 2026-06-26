@@ -119,6 +119,49 @@
             const buttonArea = document.querySelector(".magic-button-area");
             buttonArea.style.pointerEvents = "none";
 
+
+
+const princessImage = document.getElementById("princess-image");
+const openMouthImg = "princess_open.png"; // 口が開いている画像
+const closedMouthImg = "normal.png"; // 口が閉じている画像
+let mouthAnimationInterval;
+
+// 口パクアニメーションを開始する関数
+function startMouthAnimation() {
+  if (mouthAnimationInterval) return; // 既に動いている場合は何もしない
+
+  mouthAnimationInterval = setInterval(() => {
+    // 画像の src を交互に切り替える
+    princessImage.src = princessImage.src.endsWith(closedMouthImg) ? openMouthImg : closedMouthImg;
+  }, 200); // 200ミリ秒ごとに切り替え (口パクの速さ)
+}
+
+// 口パクアニメーションを停止する関数
+function stopMouthAnimation() {
+  if (mouthAnimationInterval) {
+    clearInterval(mouthAnimationInterval);
+    mouthAnimationInterval = null;
+    // 最後に口を閉じた状態に戻す
+    princessImage.src = closedMouthImg;
+  }
+}
+
+// playVoice 関数を修正
+async function playVoice(audioId) {
+  const audio = document.getElementById(audioId);
+  audio.muted = false;
+
+  return new Promise((resolve) => {
+    audio.onended = () => {
+      stopMouthAnimation(); // 音声再生終了時にアニメーションを停止
+      resolve();
+    };
+
+    startMouthAnimation(); // 音声再生開始時にアニメーションを開始
+    audio.play();
+  });
+}
+
             // シナリオスタート
             text.innerText = "📡通信接続中…";
             await playVoice("audio_kettei");
