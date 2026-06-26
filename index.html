@@ -71,10 +71,14 @@
       }
     }
 
-    .sparkle-effect {
-        border-radius: 50%;
-      animation: sparkle 1s linear infinite;
-    }
+   .sparkle-effect {
+  border-radius: 50%;
+  /* 最初の光の見た目をここにセットします */
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8), 
+              0 0 20px 10px rgba(255, 105, 180, 0.6), 
+              0 0 30px 15px rgba(255, 255, 255, 0.5);
+  animation: sparkle 1s linear infinite;
+}
     </style>
 </head>
 <body>
