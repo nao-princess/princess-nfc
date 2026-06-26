@@ -120,20 +120,24 @@
             buttonArea.style.pointerEvents = "none";
 
 
-
-const princessImage = document.getElementById("princess-image");
-const openMouthImg = "princess_open.png"; // 口が開いている画像
-const closedMouthImg = "normal.png"; // 口が閉じている画像
+// --- ここから置き換え ---
+const princessImage = document.getElementById("princess_image"); // アンダーバーに修正しました
+const openMouthImg = "mouth_open.png";   // 口が開いている画像
+const closedMouthImg = "normal.png";     // 口が閉じている画像
 let mouthAnimationInterval;
 
 // 口パクアニメーションを開始する関数
 function startMouthAnimation() {
-  if (mouthAnimationInterval) return; // 既に動いている場合は何もしない
+  if (mouthAnimationInterval) return; 
 
   mouthAnimationInterval = setInterval(() => {
-    // 画像の src を交互に切り替える
-    princessImage.src = princessImage.src.endsWith(closedMouthImg) ? openMouthImg : closedMouthImg;
-  }, 200); // 200ミリ秒ごとに切り替え (口パクの速さ)
+    // 画像の src が閉じ口で終わっていたら開き口に、そうでなければ閉じ口に変える
+    if (princessImage.src.endsWith(closedMouthImg)) {
+      princessImage.src = openMouthImg;
+    } else {
+      princessImage.src = closedMouthImg;
+    }
+  }, 200); // 200ミリ秒ごとに切り替え
 }
 
 // 口パクアニメーションを停止する関数
@@ -141,10 +145,35 @@ function stopMouthAnimation() {
   if (mouthAnimationInterval) {
     clearInterval(mouthAnimationInterval);
     mouthAnimationInterval = null;
-    // 最後に口を閉じた状態に戻す
-    princessImage.src = closedMouthImg;
+    princessImage.src = closedMouthImg; // 最後は確実に口を閉じる
   }
 }
+
+// playVoice 関数を口パク連動版に修正
+async function playVoice(audioId) {
+  const audio = document.getElementById(audioId);
+  if (!audio) {
+    console.log("見つからないID:", audioId);
+    return;
+  }
+  audio.currentTime = 0;
+  audio.muted = false;
+
+  return new Promise((resolve) => {
+    audio.onended = () => {
+      stopMouthAnimation(); // 音声再生終了時にアニメーションを停止
+      resolve();
+    };
+
+    startMouthAnimation(); // 音声再生開始時にアニメーションを開始
+    audio.play().catch(e => {
+      console.log("再生失敗:", audioId, e);
+      stopMouthAnimation();
+      resolve();
+    });
+  });
+}
+// --- ここまで置き換え ---
 
 // playVoice 関数を修正
 async function playVoice(audioId) {
