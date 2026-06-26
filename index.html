@@ -1,208 +1,180 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>プリンセスからのつうしん</title>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <style>
-    @keyframes popIn {
-  0% { transform: scale(0); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #ffe6f2;
-      text-align: center;
-      padding: 50px 20px;
-    }
-    .jewel {
-      font-size: 160px;
-      cursor: pointer;
-      display: inline-block;
-      margin: 20px;
-      user-select: none;
-      transition: transform 0.2s;
-    }
-    .jewel:active {
-      transform: scale(0.9);
-    }
-    #text {
-      font-size: 24px;
-      color: #d81b60;
-      margin-top: 30px;
-      min-height: 60px;
-      line-height: 1.5;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プリンセスからのつうしん</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #ffe6f2;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        /* 共通のボタンエリア（枠を固定して場所がずれないようにする） */
+        .magic-button-area {
+            display: inline-block;
+            margin: 20px;
+            min-height: 200px; /* 画像が入っても崩れないように最小高さを確保 */
+            vertical-align: middle;
+        }
+        .jewel {
+            font-size: 160px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .jewel:active, #princess_image:active {
+            transform: scale(0.9);
+        }
+        #text {
+            font-size: 24px;
+            color: #d81b60;
+            margin-top: 30px;
+            min-height: 60px;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+        /* プリンセス画像のスタイル（同じエリアで綺麗に収まるよう調整） */
+        #princess_image {
+            max-width: 200px; /* 💎のサイズ感に合わせるための目安（お好みで調整してください） */
+            height: auto;
+            cursor: pointer;
+            display: none;
+            animation: popIn 0.5s ease-out;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- 魔法を起こすための宝石ボタン -->
-  <div class="jewel" onclick="startMagic()">💎</div>
+    <!-- 魔法を起こすためのエリア（同じ場所に画像が切り替わるように内包） -->
+    <div class="magic-button-area">
+        <div id="jewel_btn" class="jewel" onclick="startMagic()">💎</div>
+        <img id="princess_image" src="princess.PNG" alt="プリンセス">
+    </div>
 
-  <!-- メッセージが表示される箱 -->
-  <div id="text">ほうせきを タップしてね！</div>
+    <!-- メッセージが表示される箱 -->
+    <div id="text">ほうせきを タップしてね！</div>
 
-  <!-- ========================================== -->
-  <!-- HTML側：音声プレイヤーの配置（IDはシンプルに命名） -->
-  <!-- ========================================== -->
-  <audio id="audio_kettei" src="決定ボタンを押す12.mp3"></audio>
-  <audio id="audio_dounyu" src="導入.wav"></audio>
-  <audio id="audio_ohayou" src="おはようございます.wav"></audio>
-  <audio id="audio_arigatou" src="お返事ありがとう.wav"></audio>
-  <audio id="audio_yuuki" src="ゆうきのくりすたる.wav"></audio>
-  <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
-  <audio id="audio_mode_on" src="オン.wav"></audio>
-  <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
-  <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
-<audio id="audio_princess" src="プリンセス.wav"></audio>
+    <!-- 音声プレイヤーの配置 -->
+    <audio id="audio_kettei" src="決定ボタンを押す12.mp3"></audio>
+    <audio id="audio_dounyu" src="導入.wav"></audio>
+    <audio id="audio_ohayou" src="おはようございます.wav"></audio>
+    <audio id="audio_arigatou" src="お返事ありがとう.wav"></audio>
+    <audio id="audio_yuuki" src="ゆうきのくりすたる.wav"></audio>
+    <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
+    <audio id="audio_mode_on" src="オン.wav"></audio>
+    <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
+    <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
+    <audio id="audio_princess" src="プリンセス.wav"></audio>
 
-  <!-- ★プリンセスの画像が表示される場所（背景透過素材が映える設定） -->
-<img id="princess_image" src="princess.PNG" alt="プリンセス" style="display: none; max-width: 80%; height: auto; margin: 20px auto 0 auto; animation: popIn 0.5s ease-out;">
-  <!-- ========================================== -->
-  <!-- JavaScript側：ロボットへの命令・シナリオ -->
-  <!-- ========================================== -->
-  <script>
-    // 指定したミリ秒だけ待つ命令
-    function sleep(ms) {
-      return new Promise(r => setTimeout(r, ms));
-    }
+    <script>
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-    // 指定したIDの音声を再生し、終わるまで待つ命令
-    async function playVoice(id) {
-      const audio = document.getElementById(id);
-      if (!audio) {
-        console.log("見つからないID:", id);
-        return;
-      }
+        async function playVoice(id) {
+            const audio = document.getElementById(id);
+            if (!audio) { console.log("見つからないID:", id); return; }
+            audio.currentTime = 0;
+            try {
+                await audio.play();
+                await new Promise(resolve => { audio.onended = resolve; });
+            } catch (e) { console.log("再生失敗:", id, e); }
+        }
 
-      audio.currentTime = 0;
+        function sparkle() {
+            const end = Date.now() + 2000;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+        }
 
-      try {
-        await audio.play();
-        // 音声が最後まで再生されるのを待つ
-        await new Promise(resolve => {
-          audio.onended = resolve;
-        });
-      } catch (e) {
-        console.log("再生失敗:", id, e);
-      }
-    }
+        async function startMagic() {
+            const jewelBtn = document.getElementById("jewel_btn");
+            const princessImg = document.getElementById("princess_image");
+            const text = document.getElementById("text");
 
-    // きらきらエフェクト用の仮の関数（エラー防止用）
-function sparkle() {
-  // 画面いっぱいにきらきら（紙吹雪）を2秒間降らせる
-  const end = Date.now() + 2000;
+            // 初期化：ジュエルを表示、プリンセスを非表示に
+            jewelBtn.style.display = "inline-block";
+            princessImg.style.display = "none";
 
-  (function frame() {
-    confetti({
-      particleCount: 5,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0, y: 0.8 },
-      colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff'] // プリンセス風の色合い
-    });
-    confetti({
-      particleCount: 5,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1, y: 0.8 },
-      colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff']
-    });
+            // スマホ対策：すべての音声を一瞬再生してストップ
+            const audios = document.querySelectorAll("audio");
+            for (const a of audios) {
+                a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
+            }
 
-    if (Date.now() < end) {
-      requestAnimationFrame(frame);
-    }
-  }());
-}
+            // 連打防止（エリア全体をタップ不可にする）
+            const buttonArea = document.querySelector(".magic-button-area");
+            buttonArea.style.pointerEvents = "none";
 
-    // 宝石が押されたときのメインの魔法シナリオ
-    async function startMagic() {
-      document.getElementById("princess_image").style.display = "none";
-      // 1. 最初にあらかじめすべての音声を一瞬だけ再生して止める（スマホ対策）
-      const audios = document.querySelectorAll("audio");
-      for (const a of audios) {
-        a.play()
-          .then(() => {
-            a.pause();
-            a.currentTime = 0;
-          })
-          .catch(() => {});
-      }
+            // シナリオスタート
+            text.innerText = "📡通信接続中…";
+            await playVoice("audio_kettei");
+            await sleep(1500);
+            await playVoice("audio_tsushin");
 
-      const text = document.getElementById("text");
+            text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
+            await playVoice("audio_dounyu");
+            text.innerText = "……お返事まっています…";
+            await sleep(2000);
 
-      // 二重タップ防止（連打できないようにする）
-      document.querySelector(".jewel").style.pointerEvents = "none";
+            text.innerText = "なおひめさま、おはようございます！";
+            await playVoice("audio_ohayou");
+            text.innerText = "……お返事まっています…";
+            await sleep(2000);
 
-      // シナリオスタート
-      text.innerText = "📡通信接続中…";
-      await playVoice("audio_kettei");
-      await sleep(1500);
-      await playVoice("audio_tsushin");
-    
-     text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
-      await playVoice("audio_dounyu");
+            text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです";
+            await playVoice("audio_arigatou");
+            await sleep(2000);
 
-     text.innerText = "……お返事まっています…";
-      await sleep(2000); // お返事を待つために2秒間あける
-      
-      text.innerText = "なおひめさま、おはようございます！";
-      await playVoice("audio_ohayou");
+            // ★【ここを追加】「ゆうきのクリスタル」の前に画像を切り替える
+            jewelBtn.style.display = "none";       // 💎を消す
+            princessImg.style.display = "block";    // プリンセスを同じ場所に出す
 
-      text.innerText = "……お返事まっています…";
-      await sleep(2000); // お返事を待つために2秒間あける
+            text.innerText = "今日の魔法は…ゆうきのクリスタルです💖";
+            await playVoice("audio_yuuki");
+            await sleep(2000);
 
-      text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです";
-      await playVoice("audio_arigatou");
-      await sleep(2000); //
+            text.innerText = "荷物を持って先生におはようが言えたら魔法成功！";
+            await playVoice("audio_voice5");
+            await sleep(2000);
 
-      text.innerText = "今日の魔法は…ゆうきのクリスタルです💖";
-      await playVoice("audio_yuuki");
-      await sleep(2000); //
+            text.innerText = "プリンセスモード……";
+            await playVoice("audio_princess");
+            await sleep(1000);
 
-      text.innerText = "荷物を持って先生におはようが言えたら魔法成功！";
-      await playVoice("audio_voice5");
-      await sleep(2000); //
+            // 💎ではなく、プリンセス画像が出ている状態で「タップしてね」にする
+            text.innerText = "プリンセスを タップしてね！";
+            buttonArea.style.pointerEvents = "auto"; // タップ可能に戻す
 
-     // 1. まず「プリンセス…」と表示
-  text.innerText = "プリンセスモード……";
-  await playVoice("audio_princess");
-  await sleep(1000); // 1秒待つ
+            // プリンセス画像（またはエリア内）が押されるまで待つ
+            await new Promise(resolve => {
+                buttonArea.onclick = async () => {
+                    buttonArea.style.pointerEvents = "none"; // ロック
+                    await playVoice("audio_tsushin");
+                    resolve();
+                };
+            });
 
-// 2. 画面を「💎をタップしてね！」にして、一時的にボタンをまた押せるようにする
-  text.innerText = "💎をタップしてね！";
-  const jewelButton = document.querySelector(".jewel");
-  jewelButton.style.pointerEvents = "auto"; // タップできるように復活
+            text.innerText = "オン！✨";
+            await playVoice("audio_mode_on");
 
-  // 💎が押されるまでここでじっと待つ魔法の命令
-  await new Promise(resolve => {
-    jewelButton.onclick = async () => {
-      // 宝石が押されたら、もう連打できないように再びロック
-      jewelButton.style.pointerEvents = "none";
-      
-      // 効果音を鳴らす
-      await playVoice("audio_tsushin");
-      resolve(); // 次の処理へ進む合図
-    };
-  });
+            const kirakira = document.getElementById("audio_kirakira");
+            if (kirakira) kirakira.play();
+            sparkle();
 
-  // 3. 最後に「モード、オン！✨」と表示してセリフを流す
-  text.innerText = "オン！✨";
-  await playVoice("audio_mode_on");
-
-      // 最後はBGMを流してエフェクトを出す
-      const kirakira = document.getElementById("audio_kirakira");
-      if (kirakira) kirakira.play();
-
-      sparkle();
-      document.getElementById("princess_image").style.display = "block";
-
-      // もう一度遊べるようにボタンを元に戻す
-      document.querySelector(".jewel").style.pointerEvents = "auto";
-    }
-  </script>
+            // 終了後、もう一度遊べるようにボタンエリアを元に戻す
+            buttonArea.onclick = null; // クリックイベントを一度クリア
+            buttonArea.style.pointerEvents = "auto";
+        }
+    </script>
 </body>
 </html>
