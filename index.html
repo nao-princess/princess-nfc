@@ -118,10 +118,8 @@
             // 連打防止（エリア全体をタップ不可にする）
             const buttonArea = document.querySelector(".magic-button-area");
             buttonArea.style.pointerEvents = "none";
-
-
 // --- ここから置き換え ---
-const princessImage = document.getElementById("princess_image"); // アンダーバーに修正しました
+const princessImage = document.getElementById("princess_image");
 const openMouthImg = "mouth_open.png";   // 口が開いている画像
 const closedMouthImg = "normal.png";     // 口が閉じている画像
 let mouthAnimationInterval;
@@ -131,13 +129,12 @@ function startMouthAnimation() {
   if (mouthAnimationInterval) return; 
 
   mouthAnimationInterval = setInterval(() => {
-    // 画像の src が閉じ口で終わっていたら開き口に、そうでなければ閉じ口に変える
     if (princessImage.src.endsWith(closedMouthImg)) {
       princessImage.src = openMouthImg;
     } else {
       princessImage.src = closedMouthImg;
     }
-  }, 200); // 200ミリ秒ごとに切り替え
+  }, 200);
 }
 
 // 口パクアニメーションを停止する関数
@@ -145,11 +142,11 @@ function stopMouthAnimation() {
   if (mouthAnimationInterval) {
     clearInterval(mouthAnimationInterval);
     mouthAnimationInterval = null;
-    princessImage.src = closedMouthImg; // 最後は確実に口を閉じる
+    princessImage.src = closedMouthImg;
   }
 }
 
-// playVoice 関数を口パク連動版に修正
+// これ1つだけに統合します
 async function playVoice(audioId) {
   const audio = document.getElementById(audioId);
   if (!audio) {
@@ -161,11 +158,11 @@ async function playVoice(audioId) {
 
   return new Promise((resolve) => {
     audio.onended = () => {
-      stopMouthAnimation(); // 音声再生終了時にアニメーションを停止
+      stopMouthAnimation();
       resolve();
     };
 
-    startMouthAnimation(); // 音声再生開始時にアニメーションを開始
+    startMouthAnimation();
     audio.play().catch(e => {
       console.log("再生失敗:", audioId, e);
       stopMouthAnimation();
@@ -174,22 +171,6 @@ async function playVoice(audioId) {
   });
 }
 // --- ここまで置き換え ---
-
-// playVoice 関数を修正
-async function playVoice(audioId) {
-  const audio = document.getElementById(audioId);
-  audio.muted = false;
-
-  return new Promise((resolve) => {
-    audio.onended = () => {
-      stopMouthAnimation(); // 音声再生終了時にアニメーションを停止
-      resolve();
-    };
-
-    startMouthAnimation(); // 音声再生開始時にアニメーションを開始
-    audio.play();
-  });
-}
 
             // シナリオスタート
             text.innerText = "📡通信接続中…";
