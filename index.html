@@ -73,7 +73,11 @@
     <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
     <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
     <audio id="audio_princess" src="プリンセス.wav"></audio>
-
+　　<audio id="audio_monday" src="monday.wav"></audio>
+<audio id="audio_tuesday" src="tuesday.wav"></audio>
+<audio id="audio_wednesday" src="wednesday.wav"></audio>
+<audio id="audio_thursday" src="thursday.wav"></audio>
+<audio id="audio_friday" src="friday.wav"></audio>
     <script>
         function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -139,9 +143,37 @@
             jewelBtn.style.display = "none";       // 💎を消す
             princessImg.style.display = "block";    // プリンセスを同じ場所に出す
 
-            text.innerText = "今日の魔法は…ゆうきのクリスタルです💖";
-            await playVoice("audio_yuuki");
-            await sleep(2000);
+　　　　　　　// --- 修正後：ここから置き換える ---
+// 現在の曜日を取得 (0: 日曜日, 1: 月曜日, ..., 5: 金曜日, 6: 土曜日)
+const dayOfWeek = new Date().getDay();
+
+// 曜日ごとの設定（音声のIDと、画面に表示するテキスト）
+let voiceId = "audio_yuuki"; // 念のため土日のデフォルト
+let crystalText = "今日の魔法は…ゆうきのクリスタルです💖";
+
+if (dayOfWeek === 1) {
+  voiceId = "audio_monday";
+  crystalText = "今日の魔法は…げつようびのクリスタルです🌙";
+} else if (dayOfWeek === 2) {
+  voiceId = "audio_tuesday";
+  crystalText = "今日の魔法は…かようびのクリスタルです🔥";
+} else if (dayOfWeek === 3) {
+  voiceId = "audio_wednesday";
+  crystalText = "今日の魔法は…すいようびのクリスタルです💧";
+} else if (dayOfWeek === 4) {
+  voiceId = "audio_thursday";
+  crystalText = "今日の魔法は…もくようびのクリスタルです🌳";
+} else if (dayOfWeek === 5) {
+  voiceId = "audio_friday";
+  crystalText = "今日の魔法は…きんようびのクリスタルです✨";
+}
+
+// 決定したテキストを表示して音声を再生
+text.innerText = crystalText;
+await playVoice(voiceId);
+await sleep(2000);
+// --- 修正後：ここまで ---
+            
 
             text.innerText = "荷物を持って先生におはようが言えたら魔法成功！";
             await playVoice("audio_voice5");
