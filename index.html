@@ -1,55 +1,59 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プリンセスからのつうしん</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #ffe6f2;
-            text-align: center;
-            padding: 50px 20px;
-        }
-        /* 共通のボタンエリア（枠を固定して場所がずれないようにする） */
-        .magic-button-area {
-            display: inline-block;
-            margin: 20px;
-            min-height: 200px; /* 画像が入っても崩れないように最小高さを確保 */
-            vertical-align: middle;
-        }
-        .jewel {
-            font-size: 160px;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.2s;
-            display: inline-block;
-        }
-        .jewel:active, #princess_image:active {
-            transform: scale(0.9);
-        }
-        #text {
-            font-size: 24px;
-            color: #d81b60;
-            margin-top: 30px;
-            min-height: 60px;
-            line-height: 1.5;
-            font-weight: bold;
-        }
-        /* プリンセス画像のスタイル（同じエリアで綺麗に収まるよう調整） */
-        #princess_image {
-            max-width: 200px; /* 💎のサイズ感に合わせるための目安（お好みで調整してください） */
-            height: auto;
-            cursor: pointer;
-            display: none;
-            animation: popIn 0.5s ease-out;
-        }
-        /* キラキラアニメーション */
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プリンセスからのつうしん</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #ffe6f2;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    /* 共通のボタンエリア（枠を固定して場所がずれないようにする） */
+    .magic-button-area {
+      display: inline-block;
+      margin: 20px;
+      min-height: 200px;
+      vertical-align: middle;
+    }
+    /* すべての画像に適用する共通スタイル */
+    .magic-img {
+      max-width: 200px;
+      height: auto;
+      cursor: pointer;
+      display: none;
+      animation: popIn 0.5s ease-out;
+    }
+    .magic-img:active {
+      transform: scale(0.9);
+    }
+    #text {
+      font-size: 24px;
+      color: #d81b60;
+      margin-top: 30px;
+      min-height: 60px;
+      line-height: 1.5;
+      font-weight: bold;
+    }
+
+    /* ★ フェアリーがゆっくりふわふわ上下に浮くエフェクト */
+    @keyframes fluffy {
+      0%   { transform: translateY(0); }
+      50%  { transform: translateY(-12px); }
+      100% { transform: translateY(0); }
+    }
+    .fairy-bounce {
+      animation: fluffy 2.5s ease-in-out infinite;
+    }
+
+    /* ★ 変身後の光り輝くオーラ演出 */
     @keyframes sparkle {
       0% {
         box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8),
@@ -70,227 +74,235 @@
         opacity: 1;
       }
     }
-
-   .sparkle-effect {
-  border-radius: 50%;
-  /* 最初の光の見た目をここにセットします */
-  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8), 
-              0 0 20px 10px rgba(255, 105, 180, 0.6), 
-              0 0 30px 15px rgba(255, 255, 255, 0.5);
-  animation: sparkle 1s linear infinite;
-}
-    </style>
+    .sparkle-effect {
+      border-radius: 50%;
+      animation: sparkle 1s linear infinite;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 魔法を起こすためのエリア（同じ場所に画像が切り替わるように内包） -->
-    <div class="magic-button-area">
-        <div id="jewel_btn" class="jewel" onclick="startMagic()">💎</div>
-        <img id="princess_image" src="normal.png" alt="プリンセス">
-    </div>
+  <!-- 魔法を起こすためのエリア -->
+  <div class="magic-button-area">
+    <!-- 最初は💎を表示。スタートしたらJavaScriptで日替わり画像に切り替えます -->
+    <div id="jewel_btn" style="font-size: 160px; cursor: pointer; user-select: none; transition: transform 0.2s; display: inline-block;" onclick="startMagic()">💎</div>
+    <img id="fairy_image" class="magic-img" src="fairy_monday.png" alt="フェアリー">
+    <img id="wand_image" class="magic-img" src="wand_monday.png" alt="ステッキ">
+    <img id="princess_image" class="magic-img" src="normal.png" alt="プリンセス">
+  </div>
 
-    <!-- メッセージが表示される箱 -->
-    <div id="text">ほうせきを タップしてね！</div>
+  <!-- メッセージが表示される箱 -->
+  <div id="text">ほうせきを タップしてね！</div>
 
-    <!-- 音声プレイヤーの配置 -->
-    <audio id="audio_kettei" src="決定ボタンを押す12.mp3"></audio>
-    <audio id="audio_dounyu" src="導入.wav"></audio>
-    <audio id="audio_ohayou" src="おはようございます.wav"></audio>
-    <audio id="audio_arigatou" src="お返事ありがとう.wav"></audio>
-    <audio id="audio_yuuki" src="ゆうきのくりすたる.wav"></audio>
-    <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
-    <audio id="audio_mode_on" src="オン.wav"></audio>
-    <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
-    <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
-    <audio id="audio_princess" src="プリンセス.wav"></audio>
-　　<audio id="audio_monday" src="monday.wav"></audio>
-<audio id="audio_tuesday" src="tuesday.wav"></audio>
-<audio id="audio_wednesday" src="wednesday.wav"></audio>
-<audio id="audio_thursday" src="thursday.wav"></audio>
-<audio id="audio_friday" src="friday.wav"></audio>
-    <script>
-        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+  <!-- 音声プレイヤーの配置 -->
+  <audio id="audio_kettei" src="決定ボタンを押す12.mp3"></audio>
+  <audio id="audio_dounyu" src="導入.wav"></audio>
+  <audio id="audio_ohayou" src="おはようございます.wav"></audio>
+  <audio id="audio_arigatou" src="お返事ありがとう.wav"></audio>
+  <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
+  <audio id="audio_mode_on" src="オン.wav"></audio>
+  <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
+  <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
+  <audio id="audio_princess" src="プリンセス.wav"></audio>
+  
+  <!-- 日替わりフェアリーボイス -->
+  <audio id="audio_monday" src="monday.wav"></audio>
+  <audio id="audio_tuesday" src="tuesday.wav"></audio>
+  <audio id="audio_wednesday" src="wednesday.wav"></audio>
+  <audio id="audio_thursday" src="thursday.wav"></audio>
+  <audio id="audio_friday" src="friday.wav"></audio>
 
-        async function playVoice(id) {
-            const audio = document.getElementById(id);
-            if (!audio) { console.log("見つからないID:", id); return; }
-            audio.currentTime = 0;
-            try {
-                await audio.play();
-                await new Promise(resolve => { audio.onended = resolve; });
-            } catch (e) { console.log("再生失敗:", id, e); }
+  <script>
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    const jewelBtn = document.getElementById("jewel_btn");
+    const fairyImg = document.getElementById("fairy_image");
+    const wandImg = document.getElementById("wand_image");
+    const princessImg = document.getElementById("princess_image");
+    const text = document.getElementById("text");
+    const buttonArea = document.querySelector(".magic-button-area");
+
+    const openMouthImg = "mouth_open.png";   // 口が開いている画像
+    const closedMouthImg = "normal.png";     // 口が閉じている画像
+    let mouthAnimationInterval;
+
+    // 口パクアニメーションを開始する関数
+    function startMouthAnimation() {
+      if (mouthAnimationInterval) return;
+      mouthAnimationInterval = setInterval(() => {
+        if (princessImg.src.endsWith(closedMouthImg)) {
+          princessImg.src = openMouthImg;
+        } else {
+          princessImg.src = closedMouthImg;
         }
-
-        function sparkle() {
-            const end = Date.now() + 2000;
-            (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff'] });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff'] });
-                if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
-        }
-
-        async function startMagic() {
-            const jewelBtn = document.getElementById("jewel_btn");
-            const princessImg = document.getElementById("princess_image");
-            const text = document.getElementById("text");
-
-            // 初期化：ジュエルを表示、プリンセスを非表示に
-            jewelBtn.style.display = "inline-block";
-            princessImg.style.display = "none";
-
-            // スマホ対策：すべての音声を一瞬再生してストップ
-            const audios = document.querySelectorAll("audio");
-            for (const a of audios) {
-                a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
-            }
-
-            // 連打防止（エリア全体をタップ不可にする）
-            const buttonArea = document.querySelector(".magic-button-area");
-            buttonArea.style.pointerEvents = "none";
-// --- ここから置き換え ---
-const princessImage = document.getElementById("princess_image");
-const openMouthImg = "mouth_open.png";   // 口が開いている画像
-const closedMouthImg = "normal.png";     // 口が閉じている画像
-let mouthAnimationInterval;
-
-// 口パクアニメーションを開始する関数
-function startMouthAnimation() {
-  if (mouthAnimationInterval) return; 
-
-  mouthAnimationInterval = setInterval(() => {
-    if (princessImage.src.endsWith(closedMouthImg)) {
-      princessImage.src = openMouthImg;
-    } else {
-      princessImage.src = closedMouthImg;
+      }, 200);
     }
-  }, 200);
-}
 
-// 口パクアニメーションを停止する関数
-function stopMouthAnimation() {
-  if (mouthAnimationInterval) {
-    clearInterval(mouthAnimationInterval);
-    mouthAnimationInterval = null;
-    princessImage.src = closedMouthImg;
-  }
-}
+    // 口パクアニメーションを停止する関数
+    function stopMouthAnimation() {
+      if (mouthAnimationInterval) {
+        clearInterval(mouthAnimationInterval);
+        mouthAnimationInterval = null;
+        princessImg.src = closedMouthImg;
+      }
+    }
 
-// これ1つだけに統合します
-async function playVoice(audioId) {
-  const audio = document.getElementById(audioId);
-  if (!audio) {
-    console.log("見つからないID:", audioId);
-    return;
-  }
-  audio.currentTime = 0;
-  audio.muted = false;
+    // 統合された音声再生関数（プリンセスが表示されている時だけ口パクが連動します）
+    async function playVoice(audioId) {
+      const audio = document.getElementById(audioId);
+      if (!audio) {
+        console.log("見つからないID:", audioId);
+        return;
+      }
+      audio.currentTime = 0;
+      audio.muted = false;
 
-  return new Promise((resolve) => {
-    audio.onended = () => {
-      stopMouthAnimation();
-      resolve();
-    };
+      return new Promise((resolve) => {
+        audio.onended = () => {
+          stopMouthAnimation();
+          resolve();
+        };
 
-    startMouthAnimation();
-    audio.play().catch(e => {
-      console.log("再生失敗:", audioId, e);
-      stopMouthAnimation();
-      resolve();
-    });
-  });
-}
-// --- ここまで置き換え ---
-
-            // シナリオスタート
-            text.innerText = "📡通信接続中…";
-            await playVoice("audio_kettei");
-            await sleep(1500);
-            await playVoice("audio_tsushin");
-
-            text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
-            await playVoice("audio_dounyu");
-            text.innerText = "……お返事まっています…";
-            await sleep(2000);
-
-            text.innerText = "なおひめさま、おはようございます！";
-            await playVoice("audio_ohayou");
-            text.innerText = "……お返事まっています…";
-            await sleep(2000);
-
-            text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです";
-            await playVoice("audio_arigatou");
-            await sleep(2000);
-
-            // ★【ここを追加】「ゆうきのクリスタル」の前に画像を切り替える
-            jewelBtn.style.display = "none";       // 💎を消す
-            princessImg.style.display = "block";    // プリンセスを同じ場所に出す
-
-　　　　　　　// --- 修正後：ここから置き換える ---
-// 現在の曜日を取得 (0: 日曜日, 1: 月曜日, ..., 5: 金曜日, 6: 土曜日)
-const dayOfWeek = new Date().getDay();
-
-// 曜日ごとの設定（音声のIDと、画面に表示するテキスト）
-let voiceId = "audio_yuuki"; // 念のため土日のデフォルト
-let crystalText = "今日の魔法は…ゆうきのクリスタルです💖";
-
-if (dayOfWeek === 1) {
-  voiceId = "audio_monday";
-  crystalText = "今日の魔法は…げつようびのクリスタルです🌙";
-} else if (dayOfWeek === 2) {
-  voiceId = "audio_tuesday";
-  crystalText = "今日の魔法は…かようびのクリスタルです🔥";
-} else if (dayOfWeek === 3) {
-  voiceId = "audio_wednesday";
-  crystalText = "今日の魔法は…すいようびのクリスタルです💧";
-} else if (dayOfWeek === 4) {
-  voiceId = "audio_thursday";
-  crystalText = "今日の魔法は…もくようびのクリスタルです🌳";
-} else if (dayOfWeek === 5) {
-  voiceId = "audio_friday";
-  crystalText = "今日の魔法は…きんようびのクリスタルです✨";
-}
-
-// 決定したテキストを表示して音声を再生
-text.innerText = crystalText;
-await playVoice(voiceId);
-await sleep(2000);
-// --- 修正後：ここまで ---
-            
-
-            text.innerText = "荷物を持って先生におはようが言えたら魔法成功！";
-            await playVoice("audio_voice5");
-            await sleep(2000);
-
-            text.innerText = "プリンセスモード……";
-            await playVoice("audio_princess");
-            await sleep(1000);
-
-            // 💎ではなく、プリンセス画像が出ている状態で「タップしてね」にする
-            text.innerText = "プリンセスを タップしてね！";
-            buttonArea.style.pointerEvents = "auto"; // タップ可能に戻す
-
-            // プリンセス画像（またはエリア内）が押されるまで待つ
-            await new Promise(resolve => {
-                buttonArea.onclick = async () => {
-                    buttonArea.style.pointerEvents = "none"; // ロック
-                    await playVoice("audio_tsushin");
-                    resolve();
-                };
-            });
-
-            text.innerText = "オン！✨";
-            await playVoice("audio_mode_on");
-
-            const kirakira = document.getElementById("audio_kirakira");
-            if (kirakira) kirakira.play();
-            sparkle();
-            princessImg.classList.add('sparkle-effect'); // キラキラ演出を追加
-
-            // 終了後、もう一度遊べるようにボタンエリアを元に戻す
-            buttonArea.onclick = null; // クリックイベントを一度クリア
-            buttonArea.style.pointerEvents = "auto";
+        if (princessImg.style.display === "block") {
+          startMouthAnimation();
         }
-    </script>
+
+        audio.play().catch(e => {
+          console.log("再生失敗:", audioId, e);
+          stopMouthAnimation();
+          resolve();
+        });
+      });
+    }
+
+    // 花吹雪エフェクト
+    function sparkle() {
+      const end = Date.now() + 2000;
+      (function frame() {
+        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff'] });
+        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#ffe6f2', '#d81b60', '#ffb3d9', '#ffffff'] });
+        if (Date.now() < end) { requestAnimationFrame(frame); }
+      }());
+    }
+
+    async function startMagic() {
+      // 1. 初期化と画面リセット
+      jewelBtn.style.display = "none"; // 💎を消す
+      fairyImg.style.display = "none";
+      fairyImg.classList.remove("fairy-bounce");
+      wandImg.style.display = "none";
+      princessImg.style.display = "none";
+      princessImg.classList.remove('sparkle-effect');
+      buttonArea.style.pointerEvents = "none"; // 連打防止ロック
+
+      // スマホ対策：すべての音声を一瞬再生してストップ
+      const audios = document.querySelectorAll("audio");
+      for (const a of audios) {
+        a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
+      }
+
+      // 現在の曜日を取得して、日替わりファイルとテキストをセット
+      const dayOfWeek = new Date().getDay();
+      let voiceId = "audio_monday";
+      let fairyFile = "fairy_monday.png";
+      let wandFile = "wand_monday.png";
+      let introText = "今日のパートナーは…げつようびのフェアリーです🌙";
+
+      if (dayOfWeek === 2) {
+        voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png";
+        introText = "今日のパートナーは…かようびのフェアリーです🔥";
+      } else if (dayOfWeek === 3) {
+        voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png";
+        introText = "今日のパートナーは…すいようびのフェアリーです💧";
+      } else if (dayOfWeek === 4) {
+        voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png";
+        introText = "今日のパートナーは…もくようびのフェアリーです🌳";
+      } else if (dayOfWeek === 5) {
+        voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png";
+        introText = "今日のパートナーは…きんようびのフェアリーです✨";
+      }
+
+      // 曜日別の画像をあらかじめ読み込み裏セット
+      fairyImg.src = fairyFile;
+      wandImg.src = wandFile;
+
+      // 2. シナリオスタート
+      text.innerText = "📡通信接続中…";
+      await playVoice("audio_kettei");
+      await sleep(1500);
+
+      // フェアリーが登場し、ふわふわ浮き始める
+      fairyImg.style.display = "block";
+      fairyImg.classList.add("fairy-bounce"); 
+      
+      await playVoice("audio_tsushin");
+      text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
+      await playVoice("audio_dounyu");
+
+      text.innerText = "……お返事まっています…";
+      await sleep(2000);
+
+      text.innerText = "なおひめさま、おはようございます！";
+      await playVoice("audio_ohayou");
+
+      text.innerText = "……お返事まっています…";
+      await sleep(2000);
+
+      text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです💖";
+      await playVoice("audio_arigatou");
+      await sleep(1500);
+
+      // 日替わりフェアリーの紹介
+      text.innerText = introText;
+      await playVoice(voiceId);
+      await sleep(2000);
+
+      text.innerText = "カバンを持って先生におはようが言えたら魔法成功！";
+      await playVoice("audio_voice5");
+      await sleep(2000);
+
+      // プリンセスモード…… のあと、ステッキに変身
+      text.innerText = "プリンセスモード……";
+      await playVoice("audio_princess");
+      await sleep(500);
+
+      // フェアリーを消して、日替わりステッキを同じ場所に出す
+      fairyImg.style.display = "none";
+      fairyImg.classList.remove("fairy-bounce");
+      wandImg.style.display = "block";
+      
+      text.innerText = "ステッキを プッシュして 魔法を完成させてね！";
+      buttonArea.style.pointerEvents = "auto"; // タップ可能にする
+
+      // お子さまがステッキをタップするのを待つ
+      await new Promise(resolve => {
+        buttonArea.onclick = async () => {
+          buttonArea.style.pointerEvents = "none"; // 再ロック
+          await playVoice("audio_tsushin");
+          resolve();
+        };
+      });
+
+      // 3. 魔法発動！変身後プリンセス登場
+      wandImg.style.display = "none";
+      princessImg.src = "princess_transformed.png"; // ★ここにお持ちの変身後プリンセス画像を指定
+      princessImg.style.display = "block";
+
+      text.innerText = "オン！✨いってらっしゃい！";
+      
+      // 効果音・花吹雪・きらきらオーラのトリプル演出
+      const kirakira = document.getElementById("audio_kirakira");
+      if (kirakira) kirakira.play();
+      sparkle();
+      princessImg.classList.add('sparkle-effect'); 
+      
+      // 登場したプリンセスがボイスに合わせて口パクします
+      await playVoice("audio_mode_on");
+
+      // 終了後、もう一度最初から遊べるように戻す
+      buttonArea.onclick = null;
+      buttonArea.style.pointerEvents = "auto";
+    }
+  </script>
 </body>
 </html>
