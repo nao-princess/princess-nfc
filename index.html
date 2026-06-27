@@ -49,6 +49,7 @@
             display: none;
             animation: popIn 0.5s ease-out;
             margin: 0 auto; 
+            transform-origin: bottom center; /* 💡これを追加（足元を基準にパクパクさせるため） */
         }
         .magic-img:active {
             transform: scale(0.9);
@@ -79,6 +80,19 @@
         .fairy-bounce {
             animation: fluffy 2.5s ease-in-out infinite;
         }
+
+/* 【修正箇所 2：.fairy-bounce のすぐ下あたりに貼り付け】 */
+@keyframes kuchipaku {
+    0% { transform: scaleY(1); }
+    25% { transform: scaleY(0.94) scaleX(1.02); }
+    50% { transform: scaleY(1.04); }
+    75% { transform: scaleY(0.96); }
+    100% { transform: scaleY(1); }
+}
+.fairy-talk {
+    animation: fluffy 2.5s ease-in-out infinite, kuchipaku 0.15s linear infinite !important;
+}
+        
         /* 変身後の光り輝くオーラ演出 */
         @keyframes sparkle {
             0% { box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8), 0 0 20px 10px rgba(255, 105, 180, 0.6), 0 0 30px 15px rgba(255, 255, 255, 0.5); opacity: 1; }
@@ -134,20 +148,36 @@
         const text = document.getElementById("text");
         const buttonArea = document.querySelector(".magic-button-area");
 
-        async function playVoice(audioId) {
-            const audio = document.getElementById(audioId);
-            if (!audio) { console.log("見つからないID:", audioId); return; }
-            audio.currentTime = 0;
-            audio.muted = false;
-            audio.volume = 1.0; 
-            return new Promise((resolve) => {
-                audio.onended = resolve;
-                audio.play().catch(e => {
-                    console.log("再生失敗:", audioId, e);
-                    resolve();
-                });
-            });
-        }
+       /* 【修正箇所 3：playVoice関数を以下にまるごと書き換え】 */
+async function playVoice(audioId, isFairyTalking = false) {
+    const audio = document.getElementById(audioId);
+    if (!audio) { console.log("見つからないID:", audioId); return; }
+    audio.currentTime = 0;
+    audio.muted = false;
+    audio.volume = 1.0; 
+
+    // フェアリーのおしゃべり指定があれば口パクを開始
+    if (isFairyTalking) {
+        fairyImg.classList.add("fairy-talk");
+    }
+
+    return new Promise((resolve) => {
+        audio.onended = () => {
+            // 音声が終わったら口パクを止める
+            if (isFairyTalking) {
+                fairyImg.classList.remove("fairy-talk");
+            }
+            resolve();
+        };
+        audio.play().catch(e => {
+            console.log("再生失敗:", audioId, e);
+            if (isFairyTalking) {
+                fairyImg.classList.remove("fairy-talk");
+            }
+            resolve();
+        });
+    });
+}
 
         function sparkle() {
             const end = Date.now() + 2000;
@@ -235,34 +265,34 @@
             text.innerText = `プリンセスのおしろから
 つうしんです。
 なおひめさま、きこえますか？`;
-            await playVoice("audio_dounyu");
+            await playVoice("audio_dounyu",true);
             text.innerText = "………";
             await sleep(2000);
 
             text.innerText = `なおひめさま、
 おはようございます！`;
-            await playVoice("audio_ohayou");
+            await playVoice("audio_ohayou",true);
             text.innerText = "………";
             await sleep(2000);
 
             text.innerText = `おへんじありがとう！
 今日もおこえがきけて
 とってもうれしいです💖`;
-            await playVoice("audio_arigatou");
+            await playVoice("audio_arigatou",true);
             await sleep(1500);
 
             text.innerText = introText;
-            await playVoice(voiceId);
+            await playVoice(voiceId,true);
             await sleep(2000);
 
             text.innerText = `にもつをもって、せんせいに
 おはようがいえたらまほうせいこう！`;
-            await playVoice("audio_kaban");
+            await playVoice("audio_kaban",true);
             await sleep(2000);
 
             text.innerText = `プリンセスになったらきっと、
 できます！`;
-            await playVoice("audio_dekiruyo");
+            await playVoice("audio_dekiruyo",true);
             await sleep(2000);
 
             fairyImg.style.display = "none";
