@@ -17,15 +17,19 @@
             padding: 50px 20px;
         }
         /* 共通のボタンエリア（枠を固定して場所がずれないようにする） */
-        .magic-button-area {
-            display: inline-block;
-            margin: 20px;
-            min-height: 200px;
-            vertical-align: middle;
-        }
+.magic-button-area {
+    display: inline-flex;       /* 💡並び方のルールをFlexboxに変更 */
+    flex-direction: column;     /* 💡中の要素を縦並びの基準にする */
+    align-items: center;        /* 💡真ん中に集める（横方向） */
+    justify-content: center;    /* 💡真ん中に集める（縦方向） */
+    margin: 20px auto;          /* 💡この箱自体も画面の真ん中に置く */
+    min-height: 200px;
+    vertical-align: middle;
+}
         /* フェアリーとステッキに適用する共通スタイル */
         .magic-img {
             max-width: 200px; /* ★フェアリーとステッキは元の200pxのままにします */
+            margin: 0 auto;
             height: auto;
             cursor: pointer;
             display: none;
