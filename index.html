@@ -132,24 +132,7 @@
             animation: sparkle 1s linear infinite;
         }
 
-        /* テスト用ボタンの見た目 */
-        .test-zone {
-            margin-top: 100px;
-            padding-top: 30px;
-            border-top: 2px dashed #ffb3d9;
-        }
-        .test-btn {
-            background-color: #d81b60;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 5px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
-        .test-btn:active { transform: scale(0.95); }
+     
     </style>
 </head>
 <body>
@@ -166,14 +149,7 @@
     <!-- メッセージが表示される箱 -->
     <div id="text">ほうせきを タップしてね！</div>
 
-    <!-- 💡【新設】うごきのチェックコーナー（本番の邪魔にならない最下部に配置） -->
-    <div class="test-zone">
-        <p style="color: #666; font-size: 14px;">🛠【お母さん用のテストエリア】ボタンを押すとフェアリーの動きが見られます</p>
-        <button class="test-btn" onclick="previewEffect('zoom')">1. ドキドキズーム</button>
-        <button class="test-btn" onclick="previewEffect('jump')">2. くるくるジャンプ</button>
-        <button class="test-btn" onclick="previewEffect('dance')">3. ゆらゆらダンス</button>
-        <button class="test-btn" style="background-color: #666;" onclick="previewEffect('reset')">元に戻す</button>
-    </div>
+
 
     <!-- 音声プレイヤーの配置 -->
     <audio id="audio_kettei" src="決定ボタンを押す12.mp3"></audio>
@@ -206,45 +182,6 @@
         const buttonArea = document.querySelector(".magic-button-area");
 
         let faceTimer = null; 
-
-        // 💡テストエリア用のプレビュー再生関数
-        function previewEffect(type) {
-            // テスト用に強制的にフェアリーを表示する
-            jewelBtn.style.display = "none";
-            wandImg.style.display = "none";
-            princessImg.style.display = "none";
-            fairyImg.style.display = "block";
-            
-            // 一度クラスをリセット
-            fairyImg.classList.remove("fairy-bounce", "fairy-zoom", "fairy-jump", "fairy-dance");
-            void fairyImg.offsetWidth; // アニメーションを再発動させるためのおまじない
-            
-            if (type === 'zoom') {
-                fairyImg.classList.add("fairy-zoom");
-                // 0.6秒後に元の通常ふわふわに戻す
-                setTimeout(() => {
-                    if(fairyImg.classList.contains("fairy-zoom")) {
-                        fairyImg.classList.remove("fairy-zoom");
-                        fairyImg.classList.add("fairy-bounce");
-                    }
-                }, 600);
-            } else if (type === 'jump') {
-                fairyImg.classList.add("fairy-jump");
-                // 0.6秒後に元の通常ふわふわに戻す
-                setTimeout(() => {
-                    if(fairyImg.classList.contains("fairy-jump")) {
-                        fairyImg.classList.remove("fairy-jump");
-                        fairyImg.classList.add("fairy-bounce");
-                    }
-                }, 600);
-            } else if (type === 'dance') {
-                fairyImg.classList.add("fairy-dance");
-            } else if (type === 'reset') {
-                fairyImg.classList.add("fairy-bounce");
-                fairyImg.style.display = "none";
-                jewelBtn.style.display = "inline-block";
-            }
-        }
 
         async function playVoice(audioId) {
             const audio = document.getElementById(audioId);
@@ -351,12 +288,17 @@ await playVoice("audio_tsushin");
             text.innerText = "………";
             await sleep(2000);
 
+            fairyImg.classList.remove("fairy-dance");
+　　　　　　　fairyImg.classList.add("fairy-zoom");
+
             text.innerText = `なおひめさま、
 おはようございます！`;
             await playVoice("audio_ohayou");
             text.innerText = "………";
             await sleep(2000);
 
+            fairyImg.classList.remove("fairy-zoom");
+　　　　　　fairyImg.classList.add("fairy-dance");
             text.innerText = `おへんじありがとう！
 今日もお声がきけて
 とってもうれしいです💖`;
@@ -367,11 +309,15 @@ await playVoice("audio_tsushin");
             await playVoice(voiceId);
             await sleep(2000);
 
+            fairyImg.classList.remove("fairy-dance");
+fairyImg.classList.add("fairy-zoom");
             text.innerText = `カバンを持って先生に
 おはようが言えたら魔法成功！`;
             await playVoice("audio_kaban");
             await sleep(2000);
-
+            
+fairyImg.classList.remove("fairy-zoom");
+fairyImg.classList.add("fairy-dance");
             text.innerText = `プリンセスになったらきっと、
 できるよ！`;
             await playVoice("audio_dekiruyo");
