@@ -212,21 +212,34 @@
       let voiceId = "audio_monday";
       let fairyFile = "fairy_monday.png";
       let wandFile = "wand_monday.png";
+      let princessFile = "princess_monday.png";
       let introText = "今日のパートナーは…げつようびのフェアリーです🌙";
 
-      if (dayOfWeek === 2) {
-        voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png";
-        introText = "今日のパートナーは…かようびのフェアリーです🔥";
-      } else if (dayOfWeek === 3) {
-        voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png";
-        introText = "今日のパートナーは…すいようびのフェアリーです💧";
-      } else if (dayOfWeek === 4) {
-        voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png";
-        introText = "今日のパートナーは…もくようびのフェアリーです🌳";
-      } else if (dayOfWeek === 5) {
-        voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png";
-        introText = "今日のパートナーは…きんようびのフェアリーです✨";
-      }
+     if (dayOfWeek === 2) {
+    voiceId = "audio_tuesday";
+    fairyFile = "fairy_tuesday.png";
+    wandFile = "wand_tuesday.png";
+    princessFile = "princess_tuesday.png"; // ★火曜日
+    introText = "今日のパートナーは…かようびのフェアリーです🔥";
+  } else if (dayOfWeek === 3) {
+    voiceId = "audio_wednesday";
+    fairyFile = "fairy_wednesday.png";
+    wandFile = "wand_wednesday.png";
+    princessFile = "princess_wednesday.png"; // ★水曜日
+    introText = "今日のパートナーは…すいようびのフェアリーです💧";
+  } else if (dayOfWeek === 4) {
+    voiceId = "audio_thursday";
+    fairyFile = "fairy_thursday.png";
+    wandFile = "wand_thursday.png";
+    princessFile = "princess_thursday.png"; // ★木曜日
+    introText = "今日のパートナーは…もくようびのフェアリーです🌳";
+  } else if (dayOfWeek === 5) {
+    voiceId = "audio_friday";
+    fairyFile = "fairy_friday.png";
+    wandFile = "wand_friday.png";
+    princessFile = "princess_friday.png"; // ★金曜日
+    introText = "今日のパートナーは…きんようびのフェアリーです✨";
+  }
 
       // 曜日別の画像をあらかじめ読み込み裏セット
       fairyImg.src = fairyFile;
@@ -291,7 +304,7 @@
 
       // 3. 魔法発動！変身後プリンセス登場
       wandImg.style.display = "none";
-      princessImg.src = "princess_transformed.png"; // ★ここにお持ちの変身後プリンセス画像を指定
+      princessImg.src = princessFile; // ★ここにお持ちの変身後プリンセス画像を指定
       princessImg.style.display = "block";
 
       text.innerText = "オン！✨いってらっしゃい！";
