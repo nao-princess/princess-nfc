@@ -337,20 +337,13 @@
             text.innerText = "📡通信接続中…";
             await playVoice("audio_kettei");
             await sleep(1500);
+            
+fairyImg.style.display = "block";
+// 💡「fairy-bounce」を「fairy-dance」に変えて、ダンスを踊らせます！
+fairyImg.classList.add("fairy-dance"); 
+await playVoice("audio_tsushin");
 
-            fairyImg.style.display = "block";
-            fairyImg.classList.add("fairy-bounce", "face-change");
-            await playVoice("audio_tsushin");
-
-            // 💡お顔パチパチタイマー（通常顔とにっこり顔の交互切り替え）
-            let isSmile = false;
-            const baseFairySrc = fairyFile;
-            const smileFairySrc = fairyFile.replace(".png", "_smile.png"); 
-            faceTimer = setInterval(() => {
-                isSmile = !isSmile;
-                fairyImg.src = isSmile ? smileFairySrc : baseFairySrc;
-            }, 1000);
-
+           
             text.innerText = `プリンセスのおしろから
 つうしんです。
 なおひめさま、きこえますか？`;
@@ -384,11 +377,9 @@
             await playVoice("audio_dekiruyo");
             await sleep(2000);
 
-            clearInterval(faceTimer);
-            fairyImg.src = baseFairySrc;
 
             fairyImg.style.display = "none";
-            fairyImg.classList.remove("fairy-bounce", "face-change");
+           fairyImg.classList.remove("fairy-dance");
             wandImg.style.display = "block";
 
             text.innerText = "プリンセスモード……";
