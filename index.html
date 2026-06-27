@@ -102,7 +102,8 @@
   <audio id="audio_kirakira" src="きらきら輝く3.mp3"></audio>
   <audio id="audio_mode_on" src="オン.wav"></audio>
   <audio id="audio_tsushin" src="カーソル移動11.mp3"></audio>
-  <audio id="audio_voice5" src="荷物を持っておはよう.wav"></audio>
+  <audio id="audio_kaban" src="荷物を持っておはよう.wav"></audio>
+  <audio id="audio_dekiruyo" src="できるよ.wav"></audio>
   <audio id="audio_princess" src="プリンセス.wav"></audio>
   
   <!-- 日替わりフェアリーボイス -->
@@ -213,32 +214,32 @@
       let fairyFile = "fairy_monday.png";
       let wandFile = "wand_monday.png";
       let princessFile = "princess_monday.png";
-      let introText = "今日のパートナーは…げつようびのフェアリーです🌙";
+      let introText = "げつようびは、ゆうきのクリスタルをあげるよ！";
 
      if (dayOfWeek === 2) {
     voiceId = "audio_tuesday";
     fairyFile = "fairy_tuesday.png";
     wandFile = "wand_tuesday.png";
     princessFile = "princess_tuesday.png"; // ★火曜日
-    introText = "今日のパートナーは…かようびのフェアリーです🔥";
+    introText = "かようびは、ゆうきのクリスタルをあげるよ！";
   } else if (dayOfWeek === 3) {
     voiceId = "audio_wednesday";
     fairyFile = "fairy_wednesday.png";
     wandFile = "wand_wednesday.png";
     princessFile = "princess_wednesday.png"; // ★水曜日
-    introText = "今日のパートナーは…すいようびのフェアリーです💧";
+    introText = "すいようびは、きぼうのクリスタルをあげるよ！";
   } else if (dayOfWeek === 4) {
     voiceId = "audio_thursday";
     fairyFile = "fairy_thursday.png";
     wandFile = "wand_thursday.png";
     princessFile = "princess_thursday.png"; // ★木曜日
-    introText = "今日のパートナーは…もくようびのフェアリーです🌳";
+    introText = "もくようびは、やさしさのクリスタルをあげるよ！";
   } else if (dayOfWeek === 5) {
     voiceId = "audio_friday";
     fairyFile = "fairy_friday.png";
     wandFile = "wand_friday.png";
     princessFile = "princess_friday.png"; // ★金曜日
-    introText = "今日のパートナーは…きんようびのフェアリーです✨";
+    introText = "きんようびは、えがおのクリスタルをあげるよ！";
   }
 
       // 曜日別の画像をあらかじめ読み込み裏セット
@@ -258,13 +259,13 @@
       text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
       await playVoice("audio_dounyu");
 
-      text.innerText = "……お返事まっています…";
+      text.innerText = "………";
       await sleep(2000);
 
       text.innerText = "なおひめさま、おはようございます！";
       await playVoice("audio_ohayou");
 
-      text.innerText = "……お返事まっています…";
+      text.innerText = "………";
       await sleep(2000);
 
       text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです💖";
@@ -277,18 +278,22 @@
       await sleep(2000);
 
       text.innerText = "カバンを持って先生におはようが言えたら魔法成功！";
-      await playVoice("audio_voice5");
+      await playVoice("audio_kaban");
       await sleep(2000);
 
-      // プリンセスモード…… のあと、ステッキに変身
-      text.innerText = "プリンセスモード……";
-      await playVoice("audio_princess");
-      await sleep(500);
+        text.innerText = "プリンセスになったらきっと、できるよ！";
+      await playVoice("audio_dekiruyo");
+      await sleep(2000);    
 
       // フェアリーを消して、日替わりステッキを同じ場所に出す
       fairyImg.style.display = "none";
       fairyImg.classList.remove("fairy-bounce");
       wandImg.style.display = "block";
+
+      // プリンセスモード…… のあと、ステッキに変身
+      text.innerText = "プリンセスモード……";
+      await playVoice("audio_princess");
+      await sleep(500);
       
       text.innerText = "ステッキを プッシュして 魔法を完成させてね！";
       buttonArea.style.pointerEvents = "auto"; // タップ可能にする
