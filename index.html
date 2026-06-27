@@ -123,22 +123,25 @@
     const text = document.getElementById("text");
     const buttonArea = document.querySelector(".magic-button-area");
 
+  
+
     // 【修正】口パク用の変数や関数（startMouthAnimationなど）はすべて削除しました
 
     // 【修正】口パクの連動を完全に無くし、シンプルに音声を再生するだけの関数にしました
-    async function playVoice(audioId) {
-        const audio = document.getElementById(audioId);
-        if (!audio) { console.log("見つからないID:", audioId); return; }
-        audio.currentTime = 0;
-        audio.muted = false;
-        return new Promise((resolve) => {
-            audio.onended = resolve;
-            audio.play().catch(e => {
-                console.log("再生失敗:", audioId, e);
-                resolve();
+   async function playVoice(audioId) {
+            const audio = document.getElementById(audioId);
+            if (!audio) { console.log("見つからないID:", audioId); return; }
+            audio.currentTime = 0;
+            audio.muted = false;
+            audio.volume = 1.0; // 再生するときは確実に音量を100%に戻す
+            return new Promise((resolve) => {
+                audio.onended = resolve;
+                audio.play().catch(e => {
+                    console.log("再生失敗:", audioId, e);
+                    resolve();
+                });
             });
-        });
-    }
+        }
 
     // 花吹雪エフェクト
     function sparkle() {
@@ -151,6 +154,17 @@
     }
 
     async function startMagic() {
+
+      // ★【修正ポイント】音量を完全に0にしてから再生・即停止することで、音が重なって聞こえるのを完全に防ぎます
+            const allAudios = document.querySelectorAll("audio");
+            for (const audio of allAudios) {
+                audio.volume = 0; // 音量を0にする（ミュート属性と併用して完全に無音化）
+                audio.muted = true;
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(e => console.log("アンロック失敗:", e));
+            }
         // 1. 初期化と画面リセット
         jewelBtn.style.display = "none"; // 💎を消す
         fairyImg.style.display = "none";
