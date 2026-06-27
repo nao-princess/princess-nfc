@@ -173,27 +173,27 @@
             let fairyFile = "fairy_monday.png";
             let wandFile = "wand_monday.png";
             let princessFile = "princess_monday.png";
-            let introText = "げつようびは、しあわせのクリスタルをあげるよ！";
+            let introText = "げつようびは、ちゃれんじのまほうをあげます！";
 
             if (dayOfWeek === 2) {
                 voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-                introText = "かようびは、ゆうきのクリスタルをあげるよ！";
+                introText = "かようびは、ゆうきのまほうをあげます！";
             } else if (dayOfWeek === 3) {
                 voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
-                introText = "すいようびは、きぼうのクリスタルをあげるよ！";
+                introText = "すいようびは、きらきらのまほうをあげます！";
             } else if (dayOfWeek === 4) {
                 voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png"; princessFile = "princess_thursday.png";
-                introText = "もくようびは、やさしさのクリスタルをあげるよ！";
+                introText = "もくようびは、やさしさのまほうをあげます！";
             } else if (dayOfWeek === 5) {
                 voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png"; princessFile = "princess_friday.png";
-                introText = "きんようびは、えがおのクリスタルをあげるよ！";
+                introText = "きんようびは、えがおのまほうをあげます！";
             }
 
             fairyImg.src = fairyFile;
             wandImg.src = wandFile;
 
             // 2. シナリオスタート
-            text.innerText = "📡通信接続中…";
+            text.innerText = "📡つうしんせつぞくちゅう…";
             await playVoice("audio_kettei");
             await sleep(1500);
 
@@ -201,17 +201,20 @@
             fairyImg.classList.add("fairy-bounce");
             await playVoice("audio_tsushin");
 
-            text.innerText = "プリンセスのおしろからつうしんです。なおひめさま、きこえますか？";
+            text.innerText = `プリンセスのおしろからつうしんです。
+            なおひめさま、きこえますか？`;
             await playVoice("audio_dounyu");
             text.innerText = "………";
             await sleep(2000);
 
-            text.innerText = "なおひめさま、おはようございます！";
+            text.innerText = `なおひめさま
+            おはようございます！`;
             await playVoice("audio_ohayou");
             text.innerText = "………";
             await sleep(2000);
 
-            text.innerText = "おへんじありがとう！今日もお声がきけてとってもうれしいです💖";
+            text.innerText = `おへんじありがとう！
+            今日もお声がきけてとってもうれしいです💖`;
             await playVoice("audio_arigatou");
             await sleep(1500);
 
@@ -219,11 +222,14 @@
             await playVoice(voiceId);
             await sleep(2000);
 
-            text.innerText = "カバンを持って先生におはようが言えたら魔法成功！";
+            text.innerText = `にもつをもって、
+            せんせいにおはようがいえたら、
+            まほうせいこう！`;
             await playVoice("audio_kaban");
             await sleep(2000);
 
-            text.innerText = "プリンセスになったらきっと、できるよ！";
+            text.innerText = `プリンセスになったらきっと、
+            できるよ！`;
             await playVoice("audio_dekiruyo");
             await sleep(2000);
 
@@ -235,7 +241,8 @@
             await playVoice("audio_princess");
             await sleep(500);
 
-            text.innerText = "ステッキを プッシュして 魔法を完成させてね！";
+            text.innerText = `ステッキを プッシュして
+            まほうをかんせいさせてね！`;
             buttonArea.style.pointerEvents = "auto";
 
             await new Promise(resolve => {
@@ -252,15 +259,16 @@
             princessImg.style.display = "block";
             await playVoice("audio_mode_on");
 
-            text.innerText = "オン！✨いってらっしゃい！";
+            text.innerText = "オン！✨";
+                いってらっしゃい！";
 
             const kirakira = document.getElementById("audio_kirakira");
             if (kirakira) kirakira.play();
             sparkle();
             princessImg.classList.add('sparkle-effect');
-
+            text.innerText = "いってらっしゃい！";
             await playVoice("audio_go");
-
+           
             buttonArea.onclick = null;
             buttonArea.style.pointerEvents = "auto";
         }
