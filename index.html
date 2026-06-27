@@ -196,10 +196,11 @@
       buttonArea.style.pointerEvents = "none"; // 連打防止ロック
 
       // スマホ対策：すべての音声を一瞬再生してストップ
-      const audios = document.querySelectorAll("audio");
-      for (const a of audios) {
-        a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
-      }
+     const firstAudio = document.getElementById("audio_kettei");
+  if (firstAudio) {
+    firstAudio.muted = false;
+    firstAudio.play().catch(e => console.log("iOS対策再生失敗:", e));
+  }
 
       // 現在の曜日を取得して、日替わりファイルとテキストをセット
       //const dayOfWeek = new Date().getDay();
