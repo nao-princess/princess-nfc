@@ -291,8 +291,7 @@
             princessImg.style.display = "block";
             await playVoice("audio_mode_on");
 
-            text.innerText = `オン！✨
-いってらっしゃい！`;
+            text.innerText = `オン！✨`;
 
             const kirakira = document.getElementById("audio_kirakira");
             if (kirakira) {
@@ -302,7 +301,7 @@
             }
             sparkle();
             princessImg.classList.add('sparkle-effect');
-
+            text.innerText = `いってらっしゃい！`;
             await playVoice("audio_go");
 
             buttonArea.onclick = null;
