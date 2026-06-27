@@ -202,7 +202,12 @@
       }
 
       // 現在の曜日を取得して、日替わりファイルとテキストをセット
-      const dayOfWeek = new Date().getDay();
+      //const dayOfWeek = new Date().getDay();
+      // --- 修正後：テストしたい曜日の数値を手動で指定する ---
+  const dayOfWeek = 1;
+
+
+      
       let voiceId = "audio_monday";
       let fairyFile = "fairy_monday.png";
       let wandFile = "wand_monday.png";
