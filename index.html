@@ -105,6 +105,7 @@
   <audio id="audio_kaban" src="荷物を持っておはよう.wav"></audio>
   <audio id="audio_dekiruyo" src="できるよ.wav"></audio>
   <audio id="audio_princess" src="プリンセス.wav"></audio>
+  <audio id="audio_go" src="いってらっしゃい.wav"></audio>
   
   <!-- 日替わりフェアリーボイス -->
   <audio id="audio_monday" src="monday.wav"></audio>
@@ -311,7 +312,7 @@
       wandImg.style.display = "none";
       princessImg.src = princessFile; // ★ここにお持ちの変身後プリンセス画像を指定
       princessImg.style.display = "block";
-
+     await playVoice("audio_mode_on");
       text.innerText = "オン！✨いってらっしゃい！";
       
       // 効果音・花吹雪・きらきらオーラのトリプル演出
@@ -321,7 +322,7 @@
       princessImg.classList.add('sparkle-effect'); 
       
       // 登場したプリンセスがボイスに合わせて口パクします
-      await playVoice("audio_mode_on");
+      await playVoice("audio_go");
 
       // 終了後、もう一度最初から遊べるように戻す
       buttonArea.onclick = null;
