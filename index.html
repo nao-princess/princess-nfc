@@ -224,7 +224,7 @@
             wandImg.src = wandFile;
 
             // 2. シナリオスタート
-            text.innerText = "📡通信接続中…";
+            text.innerText = "📡…つうしんせつぞくちゅう…";
             await playVoice("audio_kettei");
             await sleep(1500);
 
@@ -246,7 +246,7 @@
             await sleep(2000);
 
             text.innerText = `おへんじありがとう！
-今日もお声がきけて
+今日もおこえがきけて
 とってもうれしいです💖`;
             await playVoice("audio_arigatou");
             await sleep(1500);
@@ -255,8 +255,8 @@
             await playVoice(voiceId);
             await sleep(2000);
 
-            text.innerText = `カバンを持って先生に
-おはようが言えたら魔法成功！`;
+            text.innerText = `にもつをもって、せんせいに
+おはようがいえたらまほうせいこう！`;
             await playVoice("audio_kaban");
             await sleep(2000);
 
@@ -274,7 +274,7 @@
             await sleep(500);
 
             text.innerText = `ステッキを プッシュして 
-魔法を完成させてね！`;
+まほうをかんせいさせてね！`;
             buttonArea.style.pointerEvents = "auto";
 
             await new Promise(resolve => {
