@@ -213,8 +213,7 @@
                 firstAudio.volume = 1.0;
                 firstAudio.play().catch(e => console.log("iOS対策再生失敗:", e));
             }
-
-          let dayOfWeek = new Date().getDay();
+let dayOfWeek = new Date().getDay();
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 dayOfWeek = 1; 
             }
@@ -224,22 +223,22 @@
             let wandFile = "wand_monday.png";
             let princessFile = "princess_monday.png";
             
-            // 💡 曜日ごとの「背景色」と「クリスタルの種類」を準備します
+            // 💡 曜日ごとの「背景色」と「クリスタルの画像ファイル」を準備します
             let bgColor = "#ffe6f2"; // 月曜：ピンク
-            let crystalEmoji = "💗✨"; 
+            let crystalFile = "crystal_monday.png"; 
 
             if (dayOfWeek === 2) { // 火曜：水色
                 voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-                bgColor = "#e6f2ff"; crystalEmoji = "🩵✨"; // ⭕️ 水色のハート！
+                bgColor = "#e6f2ff"; crystalFile = "crystal_tuesday.png";
             } else if (dayOfWeek === 3) { // 水曜：緑
                 voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
-                bgColor = "#e6fff2"; crystalEmoji = "💚✨";
+                bgColor = "#e6fff2"; crystalFile = "crystal_wednesday.png";
             } else if (dayOfWeek === 4) { // 木曜：紫
                 voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png"; princessFile = "princess_thursday.png";
-                bgColor = "#f0e6ff"; crystalEmoji = "💜✨";
+                bgColor = "#f0e6ff"; crystalFile = "crystal_thursday.png";
             } else if (dayOfWeek === 5) { // 金曜：黄色
                 voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png"; princessFile = "princess_friday.png";
-                bgColor = "#fff9e6"; crystalEmoji = "💛✨";
+                bgColor = "#fff9e6"; crystalFile = "crystal_friday.png";
             }
 
             fairyImg.src = fairyFile;
@@ -253,24 +252,25 @@
             // 💡 通信が繋がった瞬間に、画面全体が「今日のテーマカラー」に変身！
             document.body.style.backgroundColor = bgColor;
 
-            // 宝石の場所に大きなお城を出して、画面の文字はスッキリ消します
-            jewelBtn.innerText = "🏰";
-            jewelBtn.style.display = "inline-block"; 
+            // ⭕️ 怖い絵文字を隠して、中身を「お城の画像」にすり替えて画面に出します！
+            jewelBtn.style.display = "none"; 
+            fairyImg.src = "castle.png"; // お城の画像に変身
+            fairyImg.style.display = "block";
             text.innerText = ""; 
 
-            // 最初のダンスの準備
+            // 最初のダンスの準備（裏で設定だけしておきます）
             fairyImg.classList.add("fairy-dance");
             await playVoice("audio_tsushin");
 
-            // ①「プリンセスのおしろから〜」（大きなお城が出ている状態）
+            // ①「プリンセスのおしろから〜」（可愛いお城の画像が出ている状態）
             await playVoice("audio_dounyu");
             await sleep(2000);
 
-            // ②「おはようございます！」の直前で、お城を隠してフェアリーをパッと出します！
-            jewelBtn.style.display = "none"; 
-            jewelBtn.innerText = "💎"; // 次のために元の宝石に戻しておく
-            
+            // ②「おはようございます！」の直前で、お城からフェアリーの姿に戻してパッと出します！
+            fairyImg.style.display = "none";
             fairyImg.classList.remove("fairy-dance");
+            
+            fairyImg.src = fairyFile; // ⭕️ ここでフェアリーちゃん登場！
             fairyImg.classList.add("fairy-zoom");
             fairyImg.style.display = "block";
 
@@ -284,34 +284,25 @@
             await playVoice("audio_arigatou");
             await sleep(1500);
 
-           // 💡【新演出】くるりん！とジャンプしてから、クリスタルに変身！
+            // 💡【演出】くるりん！とジャンプしてから、本物のクリスタル画像に変身！
             fairyImg.classList.remove("fairy-dance");
-            fairyImg.classList.add("fairy-jump"); // 1. まず「くるくるジャンプ」の動きを付ける
+            fairyImg.classList.add("fairy-jump"); 
 
-            // 💡ジャンプの動き（0.6秒）が半分くらい終わったところで、パッと画像を切り替えます
+            // ジャンプの途中で画像を差し替えます
             await sleep(300); 
 
-            // 2. フェアリーの画像を消して、宝石をドン！と出す
-            fairyImg.style.display = "none";
-            jewelBtn.innerText = crystalEmoji; 
-            jewelBtn.style.fontSize = "180px"; 
-            jewelBtn.style.display = "inline-block";
+            // フェアリーの画像の中身を「クリスタル画像」にすり替えます！
+            fairyImg.src = crystalFile;
 
-            // 残りのジャンプ時間を待ちます（残りの0.3秒）
             await sleep(300);
 
-            // 曜日ごとのクリスタルボイス
+            // 曜日ごとのクリスタルボイス（綺麗なクリスタル画像が表示されます！）
             await playVoice(voiceId);
             
-            // 💡ボイスが終わったら、フェアリーちゃんを画面に戻します
-            jewelBtn.style.display = "none";
-            jewelBtn.innerText = "💎"; 
-            jewelBtn.style.fontSize = "160px";
-            
-            // ジャンプを外して、ダンスに戻してから再登場
+            // 💡ボイスが終わったら、フェアリーちゃんの画像に戻します
             fairyImg.classList.remove("fairy-jump");
+            fairyImg.src = fairyFile; // フェアリーに戻す
             fairyImg.classList.add("fairy-dance");
-            fairyImg.style.display = "block";
 
             // 続けてすぐカバンの目標ボイス
             await playVoice("audio_kaban");
@@ -362,7 +353,3 @@
 
             buttonArea.onclick = null;
             buttonArea.style.pointerEvents = "auto";
-        }
-    </script>
-</body>
-</html>
