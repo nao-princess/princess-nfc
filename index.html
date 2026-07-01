@@ -260,63 +260,59 @@
 
             fairyImg.src = fairyFile;
             wandImg.src = wandFile;
-
-            // 2. シナリオスタート
-            text.innerText = "📡通信接続中…";
+// 2. シナリオスタート
+            text.innerText = "📡通信接続中…"; // 💡ここは接続中とわかるように残します
             await playVoice("audio_kettei");
             await sleep(1500);
+
+            // 💡お話が始まったら、画面の文字をパッと消してスッキリさせます！
+            text.innerText = ""; 
+
+            // 最初のダンスの準備
             fairyImg.classList.add("fairy-dance");
-await playVoice("audio_tsushin");
+            await playVoice("audio_tsushin");
 
-           
-       //     text.innerText = `プリンセスのおしろから
-//つうしんです。
-//なおひめさま、きこえますか？`;
+            // 💡最初は声だけで、テレビの通信らしさを出します
             await playVoice("audio_dounyu");
-            text.innerText = "………";
             await sleep(2000);
 
-// 💡「おはようございます」の直前で、ズームの動きに変えつつパッと画面に出します！
-fairyImg.classList.remove("fairy-dance");
-fairyImg.classList.add("fairy-zoom");
-fairyImg.style.display = "block"; //
-            
-       //     text.innerText = `なおひめさま、
-//おはようございます！`;
+            // 💡「おはようございます」の直前で、ズームの動きに変えつつパッと画面に出します！
+            fairyImg.classList.remove("fairy-dance");
+            fairyImg.classList.add("fairy-zoom");
+            fairyImg.style.display = "block";
+
             await playVoice("audio_ohayou");
-            text.innerText = "………";
             await sleep(2000);
 
+            // 💡ここからダンスに戻り、クリスタルとカバンのセリフをテンポよく一気に流します！
             fairyImg.classList.remove("fairy-zoom");
-　　　　　　fairyImg.classList.add("fairy-dance");
-      //      text.innerText = `おへんじありがとう！
-//今日もお声がきけて
-//とってもうれしいです💖`;
+            fairyImg.classList.add("fairy-dance");
+
             await playVoice("audio_arigatou");
             await sleep(1500);
 
-            text.innerText = introText;
+            // 曜日ごとのクリスタルボイス
             await playVoice(voiceId);
-           // text.innerText = `荷物を持って先生に
-//おはようが言えたら魔法成功！`;
-            await playVoice("audio_kaban");
-            await sleep(1000);
             
-fairyImg.classList.remove("fairy-dance");
-fairyImg.classList.add("fairy-zoom");
-         //   text.innerText = `プリンセスになったらきっと、
-//できるよ！`;
+            // 続けてすぐカバンの目標ボイスを流します
+            await playVoice("audio_kaban");
+            await sleep(2000);
+
+            // 💡最後のおうえんはズームに切り替えて引き締めます！
+            fairyImg.classList.remove("fairy-dance");
+            fairyImg.classList.add("fairy-zoom");
+
             await playVoice("audio_dekiruyo");
-            await sleep(1500);
+            await sleep(2000);
 
-
+            // フェアリーが退場してステッキへ
             fairyImg.style.display = "none";
-           fairyImg.classList.remove("fairy-dance");
+            fairyImg.classList.remove("fairy-zoom");
             wandImg.style.display = "block";
 
-         //   text.innerText = "プリンセスモード……";
             await playVoice("audio_princess");
-
+            
+            // 💡お子様が次にすること（ステッキを押す）がわかるように、ここからは文字を出します
             text.innerText = `ステッキを プッシュして 
 魔法を完成させてね！`;
             buttonArea.style.pointerEvents = "auto";
