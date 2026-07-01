@@ -214,7 +214,7 @@
                 firstAudio.play().catch(e => console.log("iOS対策再生失敗:", e));
             }
 
-            let dayOfWeek = new Date().getDay();
+          let dayOfWeek = new Date().getDay();
             if (dayOfWeek === 0 || dayOfWeek === 6) {
                 dayOfWeek = 1; 
             }
@@ -230,7 +230,7 @@
 
             if (dayOfWeek === 2) { // 火曜：水色
                 voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-                bgColor = "#e6f2ff"; crystalEmoji = "🩵✨";
+                bgColor = "#e6f2ff"; crystalEmoji = "🩵✨"; // ⭕️ 水色のハート！
             } else if (dayOfWeek === 3) { // 水曜：緑
                 voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
                 bgColor = "#e6fff2"; crystalEmoji = "💚✨";
@@ -284,13 +284,13 @@
             await playVoice("audio_arigatou");
             await sleep(1500);
 
-            // 💡【新演出】クリスタルをあげるよ！のタイミングで、今日のクリスタルに変身！
+            // 💡クリスタルをあげるよ！のタイミングで、今日のクリスタルに変身！
             fairyImg.style.display = "none";
-            jewelBtn.innerText = crystalEmoji; // ⭕️ ここが曜日ごとの色（💗💎💚💜💛）になります！
+            jewelBtn.innerText = crystalEmoji; 
             jewelBtn.style.fontSize = "180px"; 
             jewelBtn.style.display = "inline-block";
 
-            // 曜日ごとのクリスタルボイス（画面には綺麗な色のクリスタル！）
+            // 曜日ごとのクリスタルボイス
             await playVoice(voiceId);
             
             // 💡ボイスが終わったら、フェアリーちゃんを画面に戻します
@@ -344,9 +344,13 @@
                 kirakira.volume = 1.0;
                 kirakira.play();
             }
-            sparkle(); // 紙ふぶきエフェクト
+            sparkle(); 
             
             await playVoice("audio_go");
 
             buttonArea.onclick = null;
             buttonArea.style.pointerEvents = "auto";
+        }
+    </script>
+</body>
+</html>
