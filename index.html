@@ -300,21 +300,17 @@ fairyImg.style.display = "block"; //
 
             text.innerText = introText;
             await playVoice(voiceId);
-            await sleep(1000);
-
-            fairyImg.classList.remove("fairy-dance");
-fairyImg.classList.add("fairy-zoom");
            // text.innerText = `荷物を持って先生に
 //おはようが言えたら魔法成功！`;
             await playVoice("audio_kaban");
             await sleep(1000);
             
-fairyImg.classList.remove("fairy-zoom");
-fairyImg.classList.add("fairy-dance");
+fairyImg.classList.remove("fairy-dance");
+fairyImg.classList.add("fairy-zoom");
          //   text.innerText = `プリンセスになったらきっと、
 //できるよ！`;
             await playVoice("audio_dekiruyo");
-            await sleep(1000);
+            await sleep(1500);
 
 
             fairyImg.style.display = "none";
@@ -323,7 +319,6 @@ fairyImg.classList.add("fairy-dance");
 
          //   text.innerText = "プリンセスモード……";
             await playVoice("audio_princess");
-            await sleep(500);
 
             text.innerText = `ステッキを プッシュして 
 魔法を完成させてね！`;
