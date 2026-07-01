@@ -242,18 +242,23 @@
             await playVoice("audio_kettei");
             await sleep(1500);
 
-            // お話が始まったら画面の文字をパッと消します
+            // 💡お話が始まったら、文字を消す代わりに、宝石の場所に大きな電波を出します！
+            jewelBtn.innerText = "🏰";
+            jewelBtn.style.display = "inline-block"; 
             text.innerText = ""; 
 
-            // 最初のダンスの準備（画面にはまだ出さない）
+            // 最初のダンスの準備
             fairyImg.classList.add("fairy-dance");
             await playVoice("audio_tsushin");
 
-            // ①「プリンセスのおしろから〜」（声だけ）
+            // ①「プリンセスのおしろから〜」（大きな電波が出ている状態）
             await playVoice("audio_dounyu");
             await sleep(2000);
 
-            // ②「おはようございます！」の直前で、ズームにしつつパッと登場！
+            // ②「おはようございます！」の直前で、電波を隠してフェアリーをパッと出します！
+            jewelBtn.style.display = "none"; // 💡電波を消す
+            jewelBtn.innerText = "💎"; // 次のために宝石に戻しておく
+            
             fairyImg.classList.remove("fairy-dance");
             fairyImg.classList.add("fairy-zoom");
             fairyImg.style.display = "block";
