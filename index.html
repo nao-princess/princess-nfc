@@ -223,15 +223,23 @@
             let fairyFile = "fairy_monday.png";
             let wandFile = "wand_monday.png";
             let princessFile = "princess_monday.png";
+            
+            // 💡 曜日ごとの「背景色」と「クリスタルの種類」を準備します
+            let bgColor = "#ffe6f2"; // 月曜：ピンク
+            let crystalEmoji = "💗✨"; 
 
-            if (dayOfWeek === 2) {
+            if (dayOfWeek === 2) { // 火曜：水色
                 voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-            } else if (dayOfWeek === 3) {
+                bgColor = "#e6f2ff"; crystalEmoji = "🩵✨";
+            } else if (dayOfWeek === 3) { // 水曜：緑
                 voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
-            } else if (dayOfWeek === 4) {
+                bgColor = "#e6fff2"; crystalEmoji = "💚✨";
+            } else if (dayOfWeek === 4) { // 木曜：紫
                 voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png"; princessFile = "princess_thursday.png";
-            } else if (dayOfWeek === 5) {
+                bgColor = "#f0e6ff"; crystalEmoji = "💜✨";
+            } else if (dayOfWeek === 5) { // 金曜：黄色
                 voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png"; princessFile = "princess_friday.png";
+                bgColor = "#fff9e6"; crystalEmoji = "💛✨";
             }
 
             fairyImg.src = fairyFile;
@@ -242,7 +250,10 @@
             await playVoice("audio_kettei");
             await sleep(1500);
 
-            // 💡お話が始まったら、文字を消す代わりに、宝石の場所に大きな電波を出します！
+            // 💡 通信が繋がった瞬間に、画面全体が「今日のテーマカラー」に変身！
+            document.body.style.backgroundColor = bgColor;
+
+            // 宝石の場所に大きなお城を出して、画面の文字はスッキリ消します
             jewelBtn.innerText = "🏰";
             jewelBtn.style.display = "inline-block"; 
             text.innerText = ""; 
@@ -251,13 +262,13 @@
             fairyImg.classList.add("fairy-dance");
             await playVoice("audio_tsushin");
 
-            // ①「プリンセスのおしろから〜」（大きな電波が出ている状態）
+            // ①「プリンセスのおしろから〜」（大きなお城が出ている状態）
             await playVoice("audio_dounyu");
             await sleep(2000);
 
-            // ②「おはようございます！」の直前で、電波を隠してフェアリーをパッと出します！
-            jewelBtn.style.display = "none"; // 💡電波を消す
-            jewelBtn.innerText = "💎"; // 次のために宝石に戻しておく
+            // ②「おはようございます！」の直前で、お城を隠してフェアリーをパッと出します！
+            jewelBtn.style.display = "none"; 
+            jewelBtn.innerText = "💎"; // 次のために元の宝石に戻しておく
             
             fairyImg.classList.remove("fairy-dance");
             fairyImg.classList.add("fairy-zoom");
@@ -266,21 +277,35 @@
             await playVoice("audio_ohayou");
             await sleep(2000);
 
-            // ③「おへんじありがとう」からダンスに戻してテンポよく流します
+            // ③「おへんじありがとう」
             fairyImg.classList.remove("fairy-zoom");
             fairyImg.classList.add("fairy-dance");
 
             await playVoice("audio_arigatou");
             await sleep(1500);
 
-            // 曜日ごとのクリスタルボイス
+            // 💡【新演出】クリスタルをあげるよ！のタイミングで、今日のクリスタルに変身！
+            fairyImg.style.display = "none";
+            jewelBtn.innerText = crystalEmoji; // ⭕️ ここが曜日ごとの色（💗💎💚💜💛）になります！
+            jewelBtn.style.fontSize = "180px"; 
+            jewelBtn.style.display = "inline-block";
+
+            // 曜日ごとのクリスタルボイス（画面には綺麗な色のクリスタル！）
             await playVoice(voiceId);
             
+            // 💡ボイスが終わったら、フェアリーちゃんを画面に戻します
+            jewelBtn.style.display = "none";
+            jewelBtn.innerText = "💎"; 
+            jewelBtn.style.fontSize = "160px";
+            
+            fairyImg.classList.add("fairy-dance");
+            fairyImg.style.display = "block";
+
             // 続けてすぐカバンの目標ボイス
             await playVoice("audio_kaban");
             await sleep(2000);
 
-            // ④ 最後のおうえんはズームに切り替えて引き締めます！
+            // ④ 最後のおうえんはズームに切り替えます
             fairyImg.classList.remove("fairy-dance");
             fairyImg.classList.add("fairy-zoom");
 
@@ -294,7 +319,7 @@
 
             await playVoice("audio_princess");
             
-            // 次にすることをお知らせするために、ここだけ文字を出します
+            // 次にすることをお知らせ
             text.innerText = `ステッキを プッシュして 
 魔法を完成させてね！`;
             
@@ -325,7 +350,3 @@
 
             buttonArea.onclick = null;
             buttonArea.style.pointerEvents = "auto";
-        }
-    </script>
-</body>
-</html>
