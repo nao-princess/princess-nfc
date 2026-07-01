@@ -184,176 +184,181 @@
                 if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
+async function startMagic() {
+  const allAudios = document.querySelectorAll("audio");
+  for (const audio of allAudios) {
+    audio.muted = true;
+    audio.volume = 0;
+    try {
+      await audio.play();
+      audio.pause();
+      audio.currentTime = 0;
+    } catch(e) {
+      console.log("アンロック失敗:", e);
+    }
+  }
 
-        async function startMagic() {
-            const allAudios = document.querySelectorAll("audio");
-            for (const audio of allAudios) {
-                audio.muted = true;
-                audio.volume = 0;
-                try {
-                    await audio.play();
-                    audio.pause();
-                    audio.currentTime = 0;
-                } catch(e) {
-                    console.log("アンロック失敗:", e);
-                }
-            }
+  // 1. 初期化と画面リセット
+  jewelBtn.style.display = "none";
+  fairyImg.style.display = "none";
+  fairyImg.classList.remove("fairy-bounce", "fairy-zoom", "fairy-jump", "fairy-dance");
+  wandImg.style.display = "none";
+  princessImg.style.display = "none";
+  buttonArea.style.pointerEvents = "none";
 
-            // 1. 初期化と画面リセット
-            jewelBtn.style.display = "none";
-            fairyImg.style.display = "none";
-            fairyImg.classList.remove("fairy-bounce", "fairy-zoom", "fairy-jump", "fairy-dance");
-            wandImg.style.display = "none";
-            princessImg.style.display = "none";
-            buttonArea.style.pointerEvents = "none";
+  const firstAudio = document.getElementById("audio_kettei");
+  if (firstAudio) {
+    firstAudio.muted = false;
+    firstAudio.volume = 1.0;
+    firstAudio.play().catch(e => console.log("iOS対策再生失敗:", e));
+  }
 
-            const firstAudio = document.getElementById("audio_kettei");
-            if (firstAudio) {
-                firstAudio.muted = false;
-                firstAudio.volume = 1.0;
-                firstAudio.play().catch(e => console.log("iOS対策再生失敗:", e));
-            }
-let dayOfWeek = new Date().getDay();
-            if (dayOfWeek === 0 || dayOfWeek === 6) {
-                dayOfWeek = 1; 
-            }
-            
-            let voiceId = "audio_monday";
-            let fairyFile = "fairy_monday.png";
-            let wandFile = "wand_monday.png";
-            let princessFile = "princess_monday.png";
-            
-            // 💡 曜日ごとの「背景色」と「クリスタルの画像ファイル」を準備します
-        
-            let crystalFile = "crystal_monday.png"; 
+  let dayOfWeek = new Date().getDay();
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    dayOfWeek = 1;
+  }
 
-            if (dayOfWeek === 2) { // 火曜：水色
-                voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-                 crystalFile = "crystal_tuesday.png";
-            } else if (dayOfWeek === 3) { // 水曜：緑
-                voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
-                 crystalFile = "crystal_wednesday.png";
-            } else if (dayOfWeek === 4) { // 木曜：紫
-                voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png"; princessFile = "princess_thursday.png";
-                 crystalFile = "crystal_thursday.png";
-            } else if (dayOfWeek === 5) { // 金曜：黄色
-                voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png"; princessFile = "princess_friday.png";
-                crystalFile = "crystal_friday.png";
-            }
+  let voiceId = "audio_monday";
+  let fairyFile = "fairy_monday.png";
+  let wandFile = "wand_monday.png";
+  let princessFile = "princess_monday.png";
+  let crystalFile = "crystal_monday.png";
 
-            fairyImg.src = fairyFile;
-            wandImg.src = wandFile;
+  if (dayOfWeek === 2) {
+    voiceId = "audio_tuesday";
+    fairyFile = "fairy_tuesday.png";
+    wandFile = "wand_tuesday.png";
+    princessFile = "princess_tuesday.png";
+    crystalFile = "crystal_tuesday.png";
+  } else if (dayOfWeek === 3) {
+    voiceId = "audio_wednesday";
+    fairyFile = "fairy_wednesday.png";
+    wandFile = "wand_wednesday.png";
+    princessFile = "princess_wednesday.png";
+    crystalFile = "crystal_wednesday.png";
+  } else if (dayOfWeek === 4) {
+    voiceId = "audio_thursday";
+    fairyFile = "fairy_thursday.png";
+    wandFile = "wand_thursday.png";
+    princessFile = "princess_thursday.png";
+    crystalFile = "crystal_thursday.png";
+  } else if (dayOfWeek === 5) {
+    voiceId = "audio_friday";
+    fairyFile = "fairy_friday.png";
+    wandFile = "wand_friday.png";
+    princessFile = "princess_friday.png";
+    crystalFile = "crystal_friday.png";
+  }
 
-            // 2. シナリオスタート
-            text.innerText = "📡通信接続中…"; 
-            await playVoice("audio_kettei");
-            await sleep(1500);
+  fairyImg.src = fairyFile;
+  wandImg.src = wandFile;
 
-            // 💡 通信が繋がった瞬間に、画面全体が「今日のテーマカラー」に変身！
-           // document.body.style.backgroundColor = bgColor;
+  // 2. シナリオスタート
+  text.innerText = "📡通信接続中…";
+  await playVoice("audio_kettei");
+  await sleep(1500);
 
-            // ⭕️ 怖い絵文字を隠して、中身を「お城の画像」にすり替えて画面に出します！
-            jewelBtn.style.display = "none"; 
-            fairyImg.src = "castle.png"; // お城の画像に変身
-            fairyImg.style.display = "block";
-            text.innerText = ""; 
+  // ⭕️ お城を表示（ここではアニメーションクラスをつけないので固定されます）
+  jewelBtn.style.display = "none";
+  fairyImg.src = "castle.png"; 
+  fairyImg.style.display = "block";
+  text.innerText = "";
 
-            // 最初のダンスの準備（裏で設定だけしておきます）
-            fairyImg.classList.add("fairy-dance");
-            await playVoice("audio_tsushin");
+  await playVoice("audio_tsushin"); 
+  // ①「プリンセスのおしろから〜」
+  await playVoice("audio_dounyu");
+  await sleep(2000);
 
-            // ①「プリンセスのおしろから〜」（可愛いお城の画像が出ている状態）
-            await playVoice("audio_dounyu");
-            await sleep(2000);
+  // ②「おはようございます！」の直前でフェアリーちゃん登場！
+  fairyImg.style.display = "none";
+  // お城から戻すタイミングでズーム演出を開始
+  fairyImg.src = fairyFile; 
+  fairyImg.classList.add("fairy-zoom");
+  fairyImg.style.display = "block";
+  await playVoice("audio_ohayou");
+  await sleep(2000);
 
-            // ②「おはようございます！」の直前で、お城からフェアリーの姿に戻してパッと出します！
-            fairyImg.style.display = "none";
-            fairyImg.classList.remove("fairy-dance");
-            
-            fairyImg.src = fairyFile; // ⭕️ ここでフェアリーちゃん登場！
-            fairyImg.classList.add("fairy-zoom");
-            fairyImg.style.display = "block";
+  // ③「おへんじありがとう」
+  fairyImg.classList.remove("fairy-zoom");
+  fairyImg.classList.add("fairy-dance");
+  await playVoice("audio_arigatou");
+  await sleep(1500);
 
-            await playVoice("audio_ohayou");
-            await sleep(2000);
+  // 💡【演出】くるりん！とジャンプしてからクリスタルに変身！
+  fairyImg.classList.remove("fairy-dance");
+  fairyImg.classList.add("fairy-jump");
+  
+  await sleep(300); 
+  fairyImg.src = crystalFile; // 宝石（クリスタル）にすり替え
+  await sleep(300); 
 
-            // ③「おへんじありがとう」
-            fairyImg.classList.remove("fairy-zoom");
-            fairyImg.classList.add("fairy-dance");
+  // 曜日ごとのクリスタルボイス（「クリスタルをあげます！」など）
+  await playVoice(voiceId);
 
-            await playVoice("audio_arigatou");
-            await sleep(1500);
+  // ✨【追加】ボイスの直後に「しゃらら〜ん」と音楽を流す
+  const kirakiraMid = document.getElementById("audio_kirakira");
+  if (kirakiraMid) {
+    kirakiraMid.muted = false;
+    kirakiraMid.volume = 1.0;
+    // 再生が終わるのを待ってから次に進むように設定
+    await new Promise((resolve) => {
+      kirakiraMid.onended = resolve;
+      kirakiraMid.play().catch(e => { console.log(e); resolve(); });
+    });
+  }
 
-            // 💡【演出】くるりん！とジャンプしてから、本物のクリスタル画像に変身！
-            fairyImg.classList.remove("fairy-dance");
-            fairyImg.classList.add("fairy-jump"); 
+  // 💡ボイスと音楽が終わったら、フェアリーちゃんの画像に戻します
+  fairyImg.classList.remove("fairy-jump");
+  fairyImg.src = fairyFile; 
+  fairyImg.classList.add("fairy-dance");
 
-            // ジャンプの途中で画像を差し替えます
-            await sleep(300); 
+  // 続けてすぐカバンの目標ボイス
+  await playVoice("audio_kaban");
+  await sleep(2000);
 
-            // フェアリーの画像の中身を「クリスタル画像」にすり替えます！
-            fairyImg.src = crystalFile;
+  // ④ 最後のおうえんはズームに切り替えます
+  fairyImg.classList.remove("fairy-dance");
+  fairyImg.classList.add("fairy-zoom");
+  await playVoice("audio_dekiruyo");
+  await sleep(2000);
 
-            await sleep(300);
+  // フェアリーが退場してステッキへ
+  fairyImg.style.display = "none";
+  fairyImg.classList.remove("fairy-zoom");
+  wandImg.style.display = "block";
+  await playVoice("audio_princess");
 
-            // 曜日ごとのクリスタルボイス（綺麗なクリスタル画像が表示されます！）
-            await playVoice(voiceId);
-            
-            // 💡ボイスが終わったら、フェアリーちゃんの画像に戻します
-            fairyImg.classList.remove("fairy-jump");
-            fairyImg.src = fairyFile; // フェアリーに戻す
-            fairyImg.classList.add("fairy-dance");
+  // 次にすることをお知らせ
+  text.innerText = `ステッキを プッシュして 魔法を完成させてね！`;
+  buttonArea.style.pointerEvents = "auto";
 
-            // 続けてすぐカバンの目標ボイス
-            await playVoice("audio_kaban");
-            await sleep(2000);
+  await new Promise(resolve => {
+    buttonArea.onclick = async () => {
+      buttonArea.style.pointerEvents = "none";
+      await playVoice("audio_tsushin");
+      resolve();
+    };
+  });
 
-            // ④ 最後のおうえんはズームに切り替えます
-            fairyImg.classList.remove("fairy-dance");
-            fairyImg.classList.add("fairy-zoom");
+  wandImg.style.display = "none";
+  princessImg.src = princessFile;
+  princessImg.style.display = "block";
+  await playVoice("audio_mode_on");
 
-            await playVoice("audio_dekiruyo");
-            await sleep(2000);
+  // ラストのきらきら演出
+  const kirakira = document.getElementById("audio_kirakira");
+  if (kirakira) {
+    kirakira.muted = false;
+    kirakira.volume = 1.0;
+    kirakira.play();
+  }
+  sparkle();
+  
+  await playVoice("audio_go");
 
-            // フェアリーが退場してステッキへ
-            fairyImg.style.display = "none";
-            fairyImg.classList.remove("fairy-zoom");
-            wandImg.style.display = "block";
-
-            await playVoice("audio_princess");
-            
-            // 次にすることをお知らせ
-            text.innerText = `ステッキを プッシュして 
-魔法を完成させてね！`;
-            
-            buttonArea.style.pointerEvents = "auto";
-
-            await new Promise(resolve => {
-                buttonArea.onclick = async () => {
-                    buttonArea.style.pointerEvents = "none";
-                    await playVoice("audio_tsushin");
-                    resolve();
-                };
-            });
-
-            wandImg.style.display = "none";
-            princessImg.src = princessFile;
-            princessImg.style.display = "block";
-            await playVoice("audio_mode_on");
-
-            const kirakira = document.getElementById("audio_kirakira");
-            if (kirakira) {
-                kirakira.muted = false;
-                kirakira.volume = 1.0;
-                kirakira.play();
-            }
-            sparkle(); 
-            
-            await playVoice("audio_go");
-
-            buttonArea.onclick = null;
-            buttonArea.style.pointerEvents = "auto";
-} // 👈 startMagic関数を閉じるカッコを追加！
+  buttonArea.onclick = null;
+  buttonArea.style.pointerEvents = "auto";
+}
 </script>
 </body>
 </html>
