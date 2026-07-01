@@ -54,9 +54,9 @@
         .magic-img:active {
             transform: scale(0.9);
         }
-        /* 最後に出てくるプリンセスだけ、個別に400pxに拡大します */
+        /* 最後に出てくるプリンセスだけ、個別に拡大します */
         #princess_image {
-            max-width:500px; 
+            max-width: 500px; 
             margin: 0 auto; 
             box-sizing: border-box; 
             padding-right: 80px;     
@@ -85,10 +85,6 @@
             transition: none !important;
         }
 
-        /* ==========================================
-           💡【新設】3つの可愛いエフェクトのCSSルール
-           ========================================== */
-        
         /* 1. ドキドキズーム */
         @keyframes zoomInTalk {
             0% { transform: scale(1); }
@@ -120,17 +116,12 @@
         .fairy-dance {
             animation: swayDance 1.2s ease-in-out infinite !important;
         }
-
-        
-
-     
     </style>
 </head>
 <body>
 
     <!-- 魔法を起こすためのエリア -->
     <div class="magic-button-area">
-        <!-- 初期状態を確認しやすくするため、テスト時は最初からフェアリーが見えるようにスクリプトで制御できるようにしています -->
         <div id="jewel_btn" onclick="startMagic()">💎</div>
         <img id="fairy_image" class="magic-img" src="fairy_monday.png" alt="フェアリー">
         <img id="wand_image" class="magic-img" src="wand_monday.png" alt="ステッキ">
@@ -139,8 +130,6 @@
 
     <!-- メッセージが表示される箱 -->
     <div id="text">ほうせきを タップしてね！</div>
-
-
 
     <!-- 音声プレイヤーの配置 -->
     <audio id="audio_kettei" src="決定ボタンを押す12.mp3"></audio>
@@ -171,8 +160,6 @@
         const princessImg = document.getElementById("princess_image");
         const text = document.getElementById("text");
         const buttonArea = document.querySelector(".magic-button-area");
-
-        let faceTimer = null; 
 
         async function playVoice(audioId) {
             const audio = document.getElementById(audioId);
@@ -218,7 +205,6 @@
             fairyImg.classList.remove("fairy-bounce", "fairy-zoom", "fairy-jump", "fairy-dance");
             wandImg.style.display = "none";
             princessImg.style.display = "none";
-            princessImg.classList.remove('sparkle-effect');
             buttonArea.style.pointerEvents = "none";
 
             const firstAudio = document.getElementById("audio_kettei");
@@ -237,46 +223,37 @@
             let fairyFile = "fairy_monday.png";
             let wandFile = "wand_monday.png";
             let princessFile = "princess_monday.png";
-          //  let introText = `げつようびは、
-//しあわせのクリスタルをあげるよ！`;
 
             if (dayOfWeek === 2) {
                 voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-          //      introText = `かようびは、
-//ゆうきのクリスタルをあげるよ！`;
             } else if (dayOfWeek === 3) {
                 voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
-        //        introText = `すいようびは、
-//きぼうのクリスタルをあげるよ！`;
             } else if (dayOfWeek === 4) {
                 voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png"; princessFile = "princess_thursday.png";
-           //     introText = `もくようびは、
-//やさしさのクリスタルをあげるよ！`;
             } else if (dayOfWeek === 5) {
                 voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png"; princessFile = "princess_friday.png";
-      //          introText = `きんようびは、
-//えがおのクリスタルをあげるよ！`;
             }
 
             fairyImg.src = fairyFile;
             wandImg.src = wandFile;
-// 2. シナリオスタート
-            text.innerText = "📡通信接続中…"; // 💡ここは接続中とわかるように残します
+
+            // 2. シナリオスタート
+            text.innerText = "📡通信接続中…"; 
             await playVoice("audio_kettei");
             await sleep(1500);
 
-            // 💡お話が始まったら、画面の文字をパッと消してスッキリさせます！
+            // お話が始まったら画面の文字をパッと消します
             text.innerText = ""; 
 
-            // 最初のダンスの準備
+            // 最初のダンスの準備（画面にはまだ出さない）
             fairyImg.classList.add("fairy-dance");
             await playVoice("audio_tsushin");
 
-            // 💡最初は声だけで、テレビの通信らしさを出します
+            // ①「プリンセスのおしろから〜」（声だけ）
             await playVoice("audio_dounyu");
             await sleep(2000);
 
-            // 💡「おはようございます」の直前で、ズームの動きに変えつつパッと画面に出します！
+            // ②「おはようございます！」の直前で、ズームにしつつパッと登場！
             fairyImg.classList.remove("fairy-dance");
             fairyImg.classList.add("fairy-zoom");
             fairyImg.style.display = "block";
@@ -284,7 +261,7 @@
             await playVoice("audio_ohayou");
             await sleep(2000);
 
-            // 💡ここからダンスに戻り、クリスタルとカバンのセリフをテンポよく一気に流します！
+            // ③「おへんじありがとう」からダンスに戻してテンポよく流します
             fairyImg.classList.remove("fairy-zoom");
             fairyImg.classList.add("fairy-dance");
 
@@ -294,11 +271,11 @@
             // 曜日ごとのクリスタルボイス
             await playVoice(voiceId);
             
-            // 続けてすぐカバンの目標ボイスを流します
+            // 続けてすぐカバンの目標ボイス
             await playVoice("audio_kaban");
             await sleep(2000);
 
-            // 💡最後のおうえんはズームに切り替えて引き締めます！
+            // ④ 最後のおうえんはズームに切り替えて引き締めます！
             fairyImg.classList.remove("fairy-dance");
             fairyImg.classList.add("fairy-zoom");
 
@@ -312,9 +289,10 @@
 
             await playVoice("audio_princess");
             
-            // 💡お子様が次にすること（ステッキを押す）がわかるように、ここからは文字を出します
+            // 次にすることをお知らせするために、ここだけ文字を出します
             text.innerText = `ステッキを プッシュして 
 魔法を完成させてね！`;
+            
             buttonArea.style.pointerEvents = "auto";
 
             await new Promise(resolve => {
@@ -330,17 +308,14 @@
             princessImg.style.display = "block";
             await playVoice("audio_mode_on");
 
-      //      text.innerText = `オン！✨
-いってらっしゃい！`;
-
             const kirakira = document.getElementById("audio_kirakira");
             if (kirakira) {
                 kirakira.muted = false;
                 kirakira.volume = 1.0;
                 kirakira.play();
             }
-            sparkle();
-
+            sparkle(); // 紙ふぶきエフェクト
+            
             await playVoice("audio_go");
 
             buttonArea.onclick = null;
