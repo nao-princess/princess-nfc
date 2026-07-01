@@ -224,21 +224,21 @@ let dayOfWeek = new Date().getDay();
             let princessFile = "princess_monday.png";
             
             // 💡 曜日ごとの「背景色」と「クリスタルの画像ファイル」を準備します
-            let bgColor = "#ffe6f2"; // 月曜：ピンク
+        
             let crystalFile = "crystal_monday.png"; 
 
             if (dayOfWeek === 2) { // 火曜：水色
                 voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-                bgColor = "#e6f2ff"; crystalFile = "crystal_tuesday.png";
+                 crystalFile = "crystal_tuesday.png";
             } else if (dayOfWeek === 3) { // 水曜：緑
                 voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
-                bgColor = "#e6fff2"; crystalFile = "crystal_wednesday.png";
+                 crystalFile = "crystal_wednesday.png";
             } else if (dayOfWeek === 4) { // 木曜：紫
                 voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png"; princessFile = "princess_thursday.png";
-                bgColor = "#f0e6ff"; crystalFile = "crystal_thursday.png";
+                 crystalFile = "crystal_thursday.png";
             } else if (dayOfWeek === 5) { // 金曜：黄色
                 voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png"; princessFile = "princess_friday.png";
-                bgColor = "#fff9e6"; crystalFile = "crystal_friday.png";
+                crystalFile = "crystal_friday.png";
             }
 
             fairyImg.src = fairyFile;
@@ -250,7 +250,7 @@ let dayOfWeek = new Date().getDay();
             await sleep(1500);
 
             // 💡 通信が繋がった瞬間に、画面全体が「今日のテーマカラー」に変身！
-            document.body.style.backgroundColor = bgColor;
+           // document.body.style.backgroundColor = bgColor;
 
             // ⭕️ 怖い絵文字を隠して、中身を「お城の画像」にすり替えて画面に出します！
             jewelBtn.style.display = "none"; 
