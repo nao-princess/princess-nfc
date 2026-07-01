@@ -284,11 +284,21 @@
             await playVoice("audio_arigatou");
             await sleep(1500);
 
-            // 💡クリスタルをあげるよ！のタイミングで、今日のクリスタルに変身！
+           // 💡【新演出】くるりん！とジャンプしてから、クリスタルに変身！
+            fairyImg.classList.remove("fairy-dance");
+            fairyImg.classList.add("fairy-jump"); // 1. まず「くるくるジャンプ」の動きを付ける
+
+            // 💡ジャンプの動き（0.6秒）が半分くらい終わったところで、パッと画像を切り替えます
+            await sleep(300); 
+
+            // 2. フェアリーの画像を消して、宝石をドン！と出す
             fairyImg.style.display = "none";
             jewelBtn.innerText = crystalEmoji; 
             jewelBtn.style.fontSize = "180px"; 
             jewelBtn.style.display = "inline-block";
+
+            // 残りのジャンプ時間を待ちます（残りの0.3秒）
+            await sleep(300);
 
             // 曜日ごとのクリスタルボイス
             await playVoice(voiceId);
@@ -298,6 +308,8 @@
             jewelBtn.innerText = "💎"; 
             jewelBtn.style.fontSize = "160px";
             
+            // ジャンプを外して、ダンスに戻してから再登場
+            fairyImg.classList.remove("fairy-jump");
             fairyImg.classList.add("fairy-dance");
             fairyImg.style.display = "block";
 
