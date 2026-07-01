@@ -121,16 +121,7 @@
             animation: swayDance 1.2s ease-in-out infinite !important;
         }
 
-        /* 変身後の光り輝くオーラ演出 */
-        @keyframes sparkle {
-            0% { box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8), 0 0 20px 10px rgba(255, 105, 180, 0.6), 0 0 30px 15px rgba(255, 255, 255, 0.5); opacity: 1; }
-            50% { box-shadow: 0 0 15px 10px rgba(255, 255, 255, 0.9), 0 0 30px 20px rgba(255, 105, 180, 0.8), 0 0 45px 25px rgba(255, 255, 255, 0.7); opacity: 0.8; }
-            100% { box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8), 0 0 20px 10px rgba(255, 105, 180, 0.6), 0 0 30px 15px rgba(255, 255, 255, 0.5); opacity: 1; }
-        }
-        .sparkle-effect {
-            border-radius: 50%;
-            animation: sparkle 1s linear infinite;
-        }
+        
 
      
     </style>
@@ -246,25 +237,25 @@
             let fairyFile = "fairy_monday.png";
             let wandFile = "wand_monday.png";
             let princessFile = "princess_monday.png";
-            let introText = `げつようびは、
-しあわせのクリスタルをあげるよ！`;
+          //  let introText = `げつようびは、
+//しあわせのクリスタルをあげるよ！`;
 
             if (dayOfWeek === 2) {
                 voiceId = "audio_tuesday"; fairyFile = "fairy_tuesday.png"; wandFile = "wand_tuesday.png"; princessFile = "princess_tuesday.png";
-                introText = `かようびは、
-ゆうきのクリスタルをあげるよ！`;
+          //      introText = `かようびは、
+//ゆうきのクリスタルをあげるよ！`;
             } else if (dayOfWeek === 3) {
                 voiceId = "audio_wednesday"; fairyFile = "fairy_wednesday.png"; wandFile = "wand_wednesday.png"; princessFile = "princess_wednesday.png";
-                introText = `すいようびは、
-きぼうのクリスタルをあげるよ！`;
+        //        introText = `すいようびは、
+//きぼうのクリスタルをあげるよ！`;
             } else if (dayOfWeek === 4) {
                 voiceId = "audio_thursday"; fairyFile = "fairy_thursday.png"; wandFile = "wand_thursday.png"; princessFile = "princess_thursday.png";
-                introText = `もくようびは、
-やさしさのクリスタルをあげるよ！`;
+           //     introText = `もくようびは、
+//やさしさのクリスタルをあげるよ！`;
             } else if (dayOfWeek === 5) {
                 voiceId = "audio_friday"; fairyFile = "fairy_friday.png"; wandFile = "wand_friday.png"; princessFile = "princess_friday.png";
-                introText = `きんようびは、
-えがおのクリスタルをあげるよ！`;
+      //          introText = `きんようびは、
+//えがおのクリスタルをあげるよ！`;
             }
 
             fairyImg.src = fairyFile;
@@ -274,14 +265,13 @@
             text.innerText = "📡通信接続中…";
             await playVoice("audio_kettei");
             await sleep(1500);
-            
-fairyImg.style.display = "block";
+            fairyImg.classList.add("fairy-dance");
 await playVoice("audio_tsushin");
 
            
-            text.innerText = `プリンセスのおしろから
-つうしんです。
-なおひめさま、きこえますか？`;
+       //     text.innerText = `プリンセスのおしろから
+//つうしんです。
+//なおひめさま、きこえますか？`;
             await playVoice("audio_dounyu");
             text.innerText = "………";
             await sleep(2000);
@@ -289,35 +279,40 @@ await playVoice("audio_tsushin");
             fairyImg.classList.remove("fairy-dance");
 　　　　　　　fairyImg.classList.add("fairy-zoom");
 
-            text.innerText = `なおひめさま、
-おはようございます！`;
+// 💡「おはようございます」の直前で、ズームの動きに変えつつパッと画面に出します！
+fairyImg.classList.remove("fairy-dance");
+fairyImg.classList.add("fairy-zoom");
+fairyImg.style.display = "block"; //
+            
+       //     text.innerText = `なおひめさま、
+//おはようございます！`;
             await playVoice("audio_ohayou");
             text.innerText = "………";
             await sleep(2000);
 
             fairyImg.classList.remove("fairy-zoom");
 　　　　　　fairyImg.classList.add("fairy-dance");
-            text.innerText = `おへんじありがとう！
-今日もお声がきけて
-とってもうれしいです💖`;
+      //      text.innerText = `おへんじありがとう！
+//今日もお声がきけて
+//とってもうれしいです💖`;
             await playVoice("audio_arigatou");
             await sleep(1500);
 
             text.innerText = introText;
             await playVoice(voiceId);
-            await sleep(2000);
+            await sleep(1000);
 
             fairyImg.classList.remove("fairy-dance");
 fairyImg.classList.add("fairy-zoom");
-            text.innerText = `荷物を持って先生に
-おはようが言えたら魔法成功！`;
+           // text.innerText = `荷物を持って先生に
+//おはようが言えたら魔法成功！`;
             await playVoice("audio_kaban");
             await sleep(2000);
             
 fairyImg.classList.remove("fairy-zoom");
 fairyImg.classList.add("fairy-dance");
-            text.innerText = `プリンセスになったらきっと、
-できるよ！`;
+         //   text.innerText = `プリンセスになったらきっと、
+//できるよ！`;
             await playVoice("audio_dekiruyo");
             await sleep(2000);
 
@@ -326,7 +321,7 @@ fairyImg.classList.add("fairy-dance");
            fairyImg.classList.remove("fairy-dance");
             wandImg.style.display = "block";
 
-            text.innerText = "プリンセスモード……";
+         //   text.innerText = "プリンセスモード……";
             await playVoice("audio_princess");
             await sleep(500);
 
@@ -347,7 +342,7 @@ fairyImg.classList.add("fairy-dance");
             princessImg.style.display = "block";
             await playVoice("audio_mode_on");
 
-            text.innerText = `オン！✨
+      //      text.innerText = `オン！✨
 いってらっしゃい！`;
 
             const kirakira = document.getElementById("audio_kirakira");
@@ -357,7 +352,6 @@ fairyImg.classList.add("fairy-dance");
                 kirakira.play();
             }
             sparkle();
-            princessImg.classList.add('sparkle-effect');
 
             await playVoice("audio_go");
 
